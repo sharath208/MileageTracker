@@ -1,0 +1,38 @@
+
+import { StyleSheet } from 'react-native';
+
+const CommonStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  BlueBigtext: {
+    color:"#0B3C58",
+    fontFamily: 'New Rubrik',
+    fontSize: 22,
+    fontWeight: 500,
+    lineHeight: 28,
+    letterSpacing: 0,
+    textAlign: left
+  },
+  RedBigtext: {
+    color:"#EB655F",
+    fontFamily: 'New Rubrik',
+    fontSize: 22,
+    fontWeight: 500,
+    lineHeight: 28,
+    letterSpacing: 0,
+    textAlign: left
+  },
+  blueMediumtext:{
+    color:"#0B3C58",
+    fontFamily: 'New Rubrik',
+    fontSize: 20,
+    fontWeight: 500,
+    lineHeight: 28,
+    letterSpacing: 0,
+    textAlign: left
+  }
+});
+
+export default CommonStyles;
