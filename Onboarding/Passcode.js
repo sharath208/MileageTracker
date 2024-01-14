@@ -2,7 +2,8 @@ import React, { useRef, useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert ,Text, TouchableOpacity} from 'react-native';
 
 const PasscodeSetupScreen = () => {
-
+  const [passcode,setPasscode]=useState(0);
+  const [check,setCheck]=useState(0);
   return (
     <View style={{justifyContent:"space-between", flex:1,backgroundColor:"#D6E4E4"}}>
       <View style={{height:412,alignItems:'center'}}>
@@ -19,25 +20,28 @@ const PasscodeSetupScreen = () => {
                 keyboardType="numeric"
                 secureTextEntry
                 maxLength={1}
-                
+                onChangeText={(text)=>setPasscode(passcode*10+text)}
               />
               <TextInput
                 style={styles.input}
                 keyboardType="numeric"
                 secureTextEntry
                 maxLength={1}
+                onChangeText={(text)=>setPasscode(passcode*10+text)}
               />
               <TextInput
                 style={styles.input}
                 keyboardType="numeric"
                 secureTextEntry
                 maxLength={1}
+                onChangeText={(text)=>setPasscode(passcode*10+text)}
               />
               <TextInput
                 style={styles.input}
                 keyboardType="numeric"
                 secureTextEntry
                 maxLength={1}
+                onChangeText={(text)=>setPasscode(passcode*10+text)}
               />
             </View>
             <View style={{height:32}}></View>
@@ -49,6 +53,7 @@ const PasscodeSetupScreen = () => {
               keyboardType="numeric"
               secureTextEntry
               maxLength={1}
+              onChangeText={(text)=>setCheck(check*10+text)}
             />
             <TextInput
               style={styles.input}
@@ -61,19 +66,22 @@ const PasscodeSetupScreen = () => {
               keyboardType="numeric"
               secureTextEntry
               maxLength={1}
+              onChangeText={(text)=>setCheck(check*10+text)}
             />
             <TextInput
               style={styles.input}
               keyboardType="numeric"
               secureTextEntry
               maxLength={1}
+              onChangeText={(text)=>setCheck(check*10+text)}
             />
           </View> 
         </View>    
       </View>
       <View style={{alignItems:'center'}}>
         <View style={{width:284}}>
-          <Button title="Continue"/>
+        <TouchableOpacity style={{justifyContent:"center",height:48,backgroundColor:"#0B3C58",borderRadius:8}} onPress={()=>{navigation.navigate('Passcode')}}  disabled={(name===""||email==="")?true:(!isChecked
+            ||error1||error2||error3)?true:false} ><Text style={{textAlign:"center", fontSize:18,color:"white"}}>Continue</Text></TouchableOpacity>
           <View style={{margin:10,alignItems:'center'}}><TouchableOpacity><Text>Skip</Text></TouchableOpacity></View>
           <View style={{height:28}}></View>
         </View>
@@ -100,49 +108,3 @@ const styles = StyleSheet.create({
 });
 
 export default PasscodeSetupScreen;
-{/* const passcodeInputs = Array(4).fill(0);
-  const confirmPasscodeInputs = Array(4).fill(0);
-
-  const passcodeInputRefs = passcodeInputs.map(() => useRef(null));
-  const confirmPasscodeInputRefs = confirmPasscodeInputs.map(() => useRef(null));
-
-  const focusInput = (inputs, index) => {
-    if (index < inputs.length - 1) {
-      inputs[index + 1].current.focus();
-    }
-  };
-
-  const handlePasscodeChange = (text, index) => {
-    const sanitizedInput = text.replace(/[^0-9]/g, '');
-    passcodeInputs[index] = sanitizedInput;
-
-    if (sanitizedInput !== '' && index < passcodeInputs.length - 1) {
-      focusInput(passcodeInputRefs, index);
-    }
-  };
-
-  const handleConfirmPasscodeChange = (text, index) => {
-    const sanitizedInput = text.replace(/[^0-9]/g, '');
-    confirmPasscodeInputs[index] = sanitizedInput;
-
-    if (sanitizedInput !== '' && index < confirmPasscodeInputs.length - 1) {
-      focusInput(confirmPasscodeInputRefs, index);
-    }
-  };
-
-  const handleSubmit = () => {
-    const passcode = passcodeInputs.join('');
-    const confirmPasscode = confirmPasscodeInputs.join('');
-
-    if (passcode.length === 4 && confirmPasscode.length === 4) {
-      if (passcode === confirmPasscode) {
-        // Passcodes match
-        Alert.alert('Success', 'Passcode has been set successfully');
-        // You may want to save the passcode securely at this point
-      } else {
-        Alert.alert('Error', 'Passcodes do not match. Please try again.');
-      }
-    } else {
-      Alert.alert('Error', 'Please enter a 4-digit passcode');
-    }
-  }; */}

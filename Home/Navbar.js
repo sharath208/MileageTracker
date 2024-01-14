@@ -14,12 +14,12 @@ const InlineButtons = () => {
       <TouchableOpacity
         style={styles.button}
       >
+      <Text style={styles.buttonText}>Refuelling</Text>
+    </TouchableOpacity>
+    <TouchableOpacity
+      style={styles.button}
+    >
         <Text style={styles.buttonText}>Performance</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>Refuelling</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
@@ -32,12 +32,11 @@ const InlineButtons = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row', // Arrange children horizontally
-    justifyContent: 'space-between', // Distribute space between children
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     padding: 16,
   },
   button: {
-    backgroundColor: 'blue',
     padding: 10,
     borderRadius: 5,
   },

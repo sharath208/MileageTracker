@@ -1,11 +1,12 @@
 // ImageContentPage.js
 
 import React from 'react';
-import { Button, View, Image, Text, StyleSheet } from 'react-native';
+import { Button, View, Image, Text, StyleSheet ,ScrollView} from 'react-native';
 import { Icon } from 'react-native-elements';
 
-const ImageContentPage = ({navigation}) => {
+const ImageContentPage = ({navigation} ) => {
   return (
+    <ScrollView style={{flex:1,backgroundColor:"#D6E4E4",}}>
     <View style={styles.Main}>
       <View style={{height:52,width:52}}></View>
       <View style={styles.Topcontainer}>
@@ -29,19 +30,18 @@ const ImageContentPage = ({navigation}) => {
         <View style={{height:32,width:32,alignItems:'center'}}></View>
 
         <View style={{width:324}}><Button style={styles.button} title='Sign up' color="#0B3C58" onPress={() =>
-        navigation.navigate('Login')}/></View>
+        navigation.navigate('Login')} /></View>
 
       </View>
-      <View style={{alignItems:"center"}}><Image source={require('../images/Onboarding_bottom.png')} 
-        resizeMode="contain"/>
+      <View style={{alignItems:'center'}}><Image source={require('../images/Onboarding_bottom.png')} 
+        resizeMethod='auto'/></View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   Main:{
-    backgroundColor:"#D6E4E4",
     justifyContent:'space-between'
   },
   Topcontainer:{
