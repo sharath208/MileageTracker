@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert ,Text, TouchableOpacity} from 'react-native';
 
-const PasscodeSetupScreen = () => {
+const PasscodeSetupScreen = ({navigation}) => {
   const [passcode,setPasscode]=useState(0);
   const [check,setCheck]=useState(0);
   return (
@@ -80,8 +80,7 @@ const PasscodeSetupScreen = () => {
       </View>
       <View style={{alignItems:'center'}}>
         <View style={{width:284}}>
-        <TouchableOpacity style={{justifyContent:"center",height:48,backgroundColor:"#0B3C58",borderRadius:8}} onPress={()=>{navigation.navigate('Passcode')}}  disabled={(name===""||email==="")?true:(!isChecked
-            ||error1||error2||error3)?true:false} ><Text style={{textAlign:"center", fontSize:18,color:"white"}}>Continue</Text></TouchableOpacity>
+        <TouchableOpacity style={{justifyContent:"center",height:48,backgroundColor:"#0B3C58",borderRadius:8}} onPress={()=>{navigation.navigate('Passcode')}} ><Text style={{textAlign:"center", fontSize:18,color:"white"}}>Continue</Text></TouchableOpacity>
           <View style={{margin:10,alignItems:'center'}}><TouchableOpacity><Text>Skip</Text></TouchableOpacity></View>
           <View style={{height:28}}></View>
         </View>
