@@ -46,6 +46,10 @@ const ImageContentPage = ({navigation} ) => {
         setError3(true);
       }
   };
+  const Continue=()=>{
+    
+    navigation.navigate('Passcode');
+  }
   return (
     <View style={{flex:1,backgroundColor:"#D6E4E4",justifyContent:'space-between'}}>
         <View style={{marginLeft:30,justifyContent:'space-between'}}>
@@ -89,14 +93,16 @@ const ImageContentPage = ({navigation} ) => {
             {error3===false? "": <Text style={{ color: 'red' }}>Invalid Email</Text>}
           </View>
         </View>
-        <View style={{height:146,justifyContent:'center',alignItems:'center',backgroundColor:'white'}}><TouchableOpacity onPress={handleCheckboxToggle}>
-      <Text style={isChecked ? styles.checkedContainer : styles.uncheckedContainer}>
-        {isChecked && <Text style={styles.tickMark}>&#10004;</Text>}</Text>
-    </TouchableOpacity>
-          <View style={{width:324,alignItems:'center'}}><Text style={{height:36}}>Tick this box to confirm you are atleast 18 years old and agree to our <Text style={{color:isChecked===false?'black':"red"}}>terms and conditions</Text></Text>
-          <View style={{margin:10,width:284}}><TouchableOpacity style={{justifyContent:"center",height:48,backgroundColor:"#0B3C58",borderRadius:8}} onPress={()=>{navigation.navigate('Passcode')}}  disabled={(name===""||email==="")?true:(!isChecked
+        <View style={{height:146,justifyContent:'center',alignItems:'center',backgroundColor:'white'}}>
+        <View style={{width:324}}>
+            <View style={{flexDirection:"row"}}>
+              <TouchableOpacity onPress={handleCheckboxToggle}><Text style={isChecked ? styles.checkedContainer : styles.uncheckedContainer}>
+              {isChecked && <Text style={styles.tickMark}>&#10004;</Text>}</Text></TouchableOpacity>
+              <Text> Tick this box to confirm you are atleast 18 years old and agree to our <Text style={{color:isChecked===false?'black':"red"}}>terms and conditions</Text></Text>
+            </View>
+            <View style={{margin:10,width:284}}><TouchableOpacity style={{justifyContent:"center",height:48,backgroundColor:"#0B3C58",borderRadius:8}} onPress={Continue}  disabled={(name===""||email==="")?true:(!isChecked
             ||error1||error2||error3)?true:false} ><Text style={{textAlign:"center", fontSize:18,color:"white"}}>Continue</Text></TouchableOpacity></View>
-        </View>
+          </View>
         </View>
       </View>
   );
@@ -107,7 +113,7 @@ const styles = StyleSheet.create({
         width:324,
         height: 52,
         borderColor: 'gray',
-        borderWidth: 1,
+        borderRadius: 8,
         marginBottom: 10,
         paddingLeft: 10,
       },
