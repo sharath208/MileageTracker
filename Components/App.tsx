@@ -21,6 +21,7 @@ import addRefuel from './Home/addRefuel.js';
 import {NavigationContainer} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'; 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import User from './Schema';
 import {
   Text,
   View,
@@ -63,14 +64,16 @@ const Tabnav=()=>{
 } 
 const App=()=> {
   return (
-    <NavigationContainer> 
-      <Stack.Navigator initialRouteName='SignUp'>
-        <Stack.Screen name="SignUp" component={SignUp}/>
-        <Stack.Screen name="Login" component={Login}/>
-        <Stack.Screen name="Passcode" component={Passcode}/>
-        <Stack.Screen name="HomeTab" component={Tabnav} options={{headerShown:false}}/>
-      </Stack.Navigator>
-    </NavigationContainer>
+    <User.RealmProvider>
+      <NavigationContainer> 
+        <Stack.Navigator initialRouteName='SignUp'>
+          <Stack.Screen name="SignUp" component={SignUp}/>
+          <Stack.Screen name="Login" component={Login}/>
+          <Stack.Screen name="Passcode" component={Passcode}/>
+          <Stack.Screen name="HomeTab" component={Tabnav} options={{headerShown:false}}/>
+        </Stack.Navigator>
+      </NavigationContainer>
+    </User.RealmProvider>
   );
 }
 

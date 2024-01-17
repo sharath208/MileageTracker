@@ -81,7 +81,7 @@ const PasscodeSetupScreen = ({navigation}) => {
       <View style={{alignItems:'center'}}>
         <View style={{width:284}}>
         <TouchableOpacity style={{justifyContent:"center",height:48,backgroundColor:"#0B3C58",borderRadius:8}} onPress={()=>{navigation.navigate('HomeTab')}} ><Text style={{textAlign:"center", fontSize:18,color:"white"}}>Continue</Text></TouchableOpacity>
-          <View style={{margin:10,alignItems:'center'}}><TouchableOpacity onPress={()=>{navigation.navigate('HomeTab')}}><Text>Skip</Text></TouchableOpacity></View>
+          <View style={{margin:10,alignItems:'center'}}><TouchableOpacity onPress={()=>{navigation.navigate('SignUp')}}><Text>Skip</Text></TouchableOpacity></View>
           <View style={{height:28}}></View>
         </View>
       </View>

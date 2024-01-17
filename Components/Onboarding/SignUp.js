@@ -1,10 +1,12 @@
 // ImageContentPage.js
 import React from 'react';
 import { Button, View, Image, Text, StyleSheet ,TouchableOpacity} from 'react-native';
-import { Icon } from 'react-native-elements';
 import Profile from '../Home/Profile';
+import User from '../Schema';
 const ImageContentPage = ({navigation} ) => {
-  const users=0;
+  const realm = User.useRealm();
+  const people=realm.objects('User');
+  console.log(people);
   return (
     <View style={{alignItems:"center",flex:1,backgroundColor:"#D6E4E4",}}>
       <View style={{height:52}}></View>
@@ -13,7 +15,7 @@ const ImageContentPage = ({navigation} ) => {
           resizeMode="contain"></Image>
         </View>
       {
-      users==0?<View style={{justifyContent:""}}><View style={{alignItems:"center"}}>
+      people.length==0?<View style={{justifyContent:""}}><View style={{alignItems:"center"}}>
         <View style={{height:8,width:8,alignItems:'center'}}></View>
 
         <View style={styles.Text}>
@@ -38,8 +40,10 @@ const ImageContentPage = ({navigation} ) => {
         <View style={{height:200}}></View>
         <Text style={{fontSize:25,color:'#0B3C58',fontFamily:"New Rubrik"}}>Who are you?</Text>
         <View style={{flexDirection:"row",flexWrap:"wrap",justifyContent:"flex-start"}}>
-          {/* logic goes here */}
-          <View style={{alignItems:"center"}}><TouchableOpacity style={StyleSheet.Image}><Image source={require('../images/add.png')} style={{borderRadius:50,height:100,width:100}}/><View style={{alignItems:"center"}}><Text style={{fontSize:16}}>Add User</Text></View></TouchableOpacity></View>
+          {
+            people.map(person=>{return <Profile name={person.nickname}/>})
+          }
+          <View style={{alignItems:"center"}}><TouchableOpacity style={StyleSheet.Image} onPress={()=>{navigation.navigate('Login')}}><Image source={require('../images/add.png')} style={{borderRadius:50,height:100,width:100}}/><View style={{alignItems:"center"}}><Text style={{fontSize:16}}>Add User</Text></View></TouchableOpacity></View>
         </View>
       </View>
       }

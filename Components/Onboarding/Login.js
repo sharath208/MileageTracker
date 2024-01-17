@@ -1,4 +1,5 @@
 import React , {useState }from 'react';
+import User from '../Schema';
 import { Button, View, TextInput,Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
 const ImageContentPage = ({navigation} ) => {
   const [isChecked, setChecked] = useState(false);
@@ -6,6 +7,7 @@ const ImageContentPage = ({navigation} ) => {
   const handleCheckboxToggle = () => {
     setChecked(!isChecked);
   };
+  const realm=User.useRealm();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [nickName, setNickName] = useState('');
@@ -35,7 +37,6 @@ const ImageContentPage = ({navigation} ) => {
       }
   };
   const checkEmail = (value) => {
-    // Regular expression for basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     setEmail(value);
     if(value==="")
@@ -47,7 +48,10 @@ const ImageContentPage = ({navigation} ) => {
       }
   };
   const Continue=()=>{
-    
+    console.log(name,nickName,email);
+    realm.write(()=>{
+      realm.create('User',{email:email,name:name,nickname:nickName});
+    });
     navigation.navigate('Passcode');
   }
   return (
@@ -69,7 +73,7 @@ const ImageContentPage = ({navigation} ) => {
             onChangeText={(text) => handleNameChange(text)}
             value={name}
             />
-            {error1===false? "": <Text style={{ color: 'red' }}>You cannot include symbols or numbers</Text>}
+            {error1===true && <Text style={{ color: 'red' }}>You cannot include symbols or numbers</Text>}
             <View style={styles.mediumBox}></View>
             <View><Text>NickName</Text></View>
             <View style={styles.smallBox}></View>
@@ -79,7 +83,7 @@ const ImageContentPage = ({navigation} ) => {
             onChangeText={(text) => handleNickNameChange(text)}
             value={nickName}
             />
-            {error2===false? "": <Text style={{ color: 'red' }}>You cannot include symbols or numbers</Text>}
+            {error2===true && <Text style={{ color: 'red' }}>You cannot include symbols or numbers</Text>}
             <View style={styles.mediumBox}></View>
             <View><Text>Email Address < Text style={{color:"red"}}>*</Text></Text></View>
             <View style={styles.smallBox}></View>
@@ -90,7 +94,7 @@ const ImageContentPage = ({navigation} ) => {
             value={email}
             keyboardType="email-address"
             />
-            {error3===false? "": <Text style={{ color: 'red' }}>Invalid Email</Text>}
+            {error3===true && <Text style={{ color: 'red' }}>Invalid Email</Text>}
           </View>
         </View>
         <View style={{height:146,justifyContent:'center',alignItems:'center',backgroundColor:'white'}}>
