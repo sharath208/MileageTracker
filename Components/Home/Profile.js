@@ -2,7 +2,8 @@ import {View,TouchableOpacity,StyleSheet,Image,Text} from 'react-native';
 const Profile=(props)=>
 {
     return(
-        <View style={{alignItems:"center"}}><TouchableOpacity style={StyleSheet.Image}><Image source={require('../images/add.png')} style={{borderRadius:50,height:100,width:100}}/><View style={{alignItems:"center"}}><Text>{props.name}</Text></View></TouchableOpacity></View>
+        console.log("in porfile"),
+        <View style={{alignItems:"center"}}><Image source={require('../images/add.png')} style={{borderRadius:50,height:100,width:100}}/><View style={{alignItems:"center"}}><Text>{props.user.nickName===null?props.user.name:props.user.nickname}</Text></View></View>
     )
 }
 const styles=StyleSheet.create({

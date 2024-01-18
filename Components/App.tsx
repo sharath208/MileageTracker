@@ -70,6 +70,7 @@ const App=()=> {
           <Stack.Screen name="SignUp" component={SignUp}/>
           <Stack.Screen name="Login" component={Login}/>
           <Stack.Screen name="Passcode" component={Passcode}/>
+          <Stack.Screen name="WelcomeBack" component={WelcomeBack}/>
           <Stack.Screen name="HomeTab" component={Tabnav} options={{headerShown:false}}/>
         </Stack.Navigator>
       </NavigationContainer>

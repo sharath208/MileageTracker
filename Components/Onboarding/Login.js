@@ -1,6 +1,6 @@
 import React , {useState }from 'react';
 import User from '../Schema';
-import { Button, View, TextInput,Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import { View, TextInput,Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
 const ImageContentPage = ({navigation} ) => {
   const [isChecked, setChecked] = useState(false);
 
@@ -52,7 +52,9 @@ const ImageContentPage = ({navigation} ) => {
     realm.write(()=>{
       realm.create('User',{email:email,name:name,nickname:nickName});
     });
-    navigation.navigate('Passcode');
+    navigation.navigate('Passcode', {
+      email:email
+    });
   }
   return (
     <View style={{flex:1,backgroundColor:"#D6E4E4",justifyContent:'space-between'}}>
@@ -73,7 +75,7 @@ const ImageContentPage = ({navigation} ) => {
             onChangeText={(text) => handleNameChange(text)}
             value={name}
             />
-            {error1===true && <Text style={{ color: 'red' }}>You cannot include symbols or numbers</Text>}
+            {error1===true &&<View style={{ flexDirection: 'row'}}><Image source={require('../images/error.png')}/><Text style={{ color: 'red' }}>You cannot include symbols or numbers</Text></View> }
             <View style={styles.mediumBox}></View>
             <View><Text>NickName</Text></View>
             <View style={styles.smallBox}></View>
@@ -83,7 +85,7 @@ const ImageContentPage = ({navigation} ) => {
             onChangeText={(text) => handleNickNameChange(text)}
             value={nickName}
             />
-            {error2===true && <Text style={{ color: 'red' }}>You cannot include symbols or numbers</Text>}
+            {error2===true &&<View style={{ flexDirection: 'row'}}><Image source={require('../images/error.png')}/><Text style={{ color: 'red' }}>You cannot include symbols or numbers</Text></View>}
             <View style={styles.mediumBox}></View>
             <View><Text>Email Address < Text style={{color:"red"}}>*</Text></Text></View>
             <View style={styles.smallBox}></View>
@@ -94,7 +96,7 @@ const ImageContentPage = ({navigation} ) => {
             value={email}
             keyboardType="email-address"
             />
-            {error3===true && <Text style={{ color: 'red' }}>Invalid Email</Text>}
+            {error3===true &&<View style={{ flexDirection: 'row'}}><Image source={require('../images/error.png')}/><Text style={{ color: 'red' }}>Invalid Email</Text></View> }
           </View>
         </View>
         <View style={{height:146,justifyContent:'center',alignItems:'center',backgroundColor:'white'}}>
