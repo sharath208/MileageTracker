@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import DropDown from './DropDown';
+import DropDown from '../ReusableComp/DropDown';
 const SignUpPage = () => {
     const lists=[];
   return (

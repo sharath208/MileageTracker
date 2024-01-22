@@ -1,30 +1,36 @@
 // ImageContentPage.js
-import React from 'react';
-import { Button, View, Image, Text, StyleSheet ,TouchableOpacity} from 'react-native';
-import Profile from '../Home/Profile';
-import User from '../Schema';
-import useStore from '../Zustand';
+import React ,{ useEffect, useState } from 'react';
+import { ScrollView, View, Image, Text, StyleSheet ,TouchableOpacity} from 'react-native';
+import Profile from '../ReusableComp/Profile';
+import { useRealm } from '@realm/react';
+import useStore from '../../Zustand';
 const ImageContentPage = ({navigation} ) => {
-  const per=User.useQuery('User');
   const setter = useStore((state)=>state.setter);
-  const realm=User.useRealm();
-  const people=realm.objects('User');
-  console.log(people); 
-  /* const delet=()=>{
-    realm.write(() => {
-      realm.delete(per);
-    });
-  }  */
+  const [users, setUsers] = useState([]);
+  const realm=useRealm();
+  useEffect(() => {
+    const people = realm.objects('User');
+    setUsers(people);
+  }, [realm]);
+
+const del = () => {
+  const people = realm.objects('User');
+  realm.write(() => {
+    realm.delete(people);
+  });
+};
+
   return (
+    <ScrollView>
     <View style={{alignItems:"center",flex:1,backgroundColor:"#D6E4E4",}}>
-      {/* git */}
+      <TouchableOpacity onPress={del}><Text>Delete all</Text></TouchableOpacity>
       <View style={{height:52}}></View>
        <View style={styles.TopImage}>
           <Image source={require('../images/ic_launcher.png')} 
           resizeMode="contain"></Image>
         </View>
       {
-      people.length==0?<View style={{justifyContent:""}}><View style={{alignItems:"center"}}>
+      users.length==0?<View style={{justifyContent:""}}><View style={{alignItems:"center"}}>
         <View style={{height:8,width:8,alignItems:'center'}}></View>
         
         <View style={styles.Text}>
@@ -48,19 +54,22 @@ const ImageContentPage = ({navigation} ) => {
       <View style={{width:"80%",alignItems:"center"}}>
         <View style={{height:200}}></View>
         <Text style={{fontSize:25,color:'#0B3C58',fontFamily:"New Rubrik"}}>Who are you?</Text>
-        <View style={{flexDirection:"row",flexWrap:"wrap",justifyContent:"flex-start"}}>
+        <View style={{flexDirection:"row",flexWrap:"wrap",justifyContent:"space-evenly"}}>
           {
-            people.map((person)=>{return <TouchableOpacity style={StyleSheet.Image} onPress={()=>{setter(person.email);
-              if(person.passcode===null)
-              navigation.navigate('HomeTab')
+              users.map((person)=>{return <TouchableOpacity key={person.id} style={styles.Image} onPress={()=>{
+              if(person.passcode===10001){
+                setter(person.email,person.name,person.nickname);
+                navigation.navigate('HomeTab')
+              }
               else
-              navigation.navigate('WelcomeBack')}}><Profile navigation={navigation} user={person}/></TouchableOpacity>})
+              navigation.navigate('WelcomeBack', {email: person.email,name:person.name,nickname:person.nickname})}}><Profile navigation={navigation} name={person.name} nickname={person.nickname}/></TouchableOpacity>})
           } 
-          <View style={{alignItems:"center"}}><TouchableOpacity style={StyleSheet.Image} onPress={()=>{navigation.navigate('Login')}}><Image source={require('../images/add.png')} style={{borderRadius:50,height:100,width:100}}/><View style={{alignItems:"center"}}><Text style={{fontSize:16}}>Add User</Text></View></TouchableOpacity></View>
+          <TouchableOpacity style={styles.Image} onPress={()=>{navigation.navigate('Login')}}><View style={{alignItems:"center"}}><Image source={require('../images/add.png')} style={{borderRadius:50,height:100,width:100}}/><View style={{alignItems:"center"}}><Text>Add User</Text></View></View></TouchableOpacity>
         </View>
       </View>
       }
       </View>
+      </ScrollView>
   );
 };
 
@@ -82,6 +91,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     gap: 8,
     angle: -0,
+  },
+  Image:{
+    height:150,
+    width:150,
   }
 });
 

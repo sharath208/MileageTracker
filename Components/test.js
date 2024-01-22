@@ -1,71 +1,38 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
+import { View, TextInput, Text, StyleSheet } from 'react-native';
 
-const App = () => {
-  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(null);
-
-  const options = ['Option 1', 'Option 2', 'Option 3'];
-
-  const toggleDropdown = () => {
-    setIsDropdownVisible(!isDropdownVisible);
-  };
-
-  const selectOption = (option) => {
-    setSelectedValue(option);
-    toggleDropdown();
-  };
+const FloatingLabelTextInput = () => {
+  const [text, setText] = useState('');
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={toggleDropdown} style={styles.dropdownButton}>
-        <Text>{selectedValue || 'Select an option'}</Text>
-      </TouchableOpacity>
-
-      {isDropdownVisible && (
-        <View style={styles.dropdownList}>
-          <FlatList
-            data={options}
-            keyExtractor={(item) => item}
-            renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => selectOption(item)} style={styles.option}>
-                <Text>{item}</Text>
-              </TouchableOpacity>
-            )}
-          />
-        </View>
-      )}
+      <Text style={[styles.placeholder, { top: text ? -20 : 10 }]}>Your Placeholder</Text>
+      <TextInput
+        style={styles.input}
+        value={text}
+        onChangeText={(newText) => setText(newText)}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    position: 'relative',
+    margin: 20,
   },
-  dropdownButton: {
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
-  },
-  dropdownList: {
-    position: 'absolute',
-    top: 40,
-    width: 200,
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    zIndex: 1,
-  },
-  option: {
-    paddingVertical: 10,
-    paddingHorizontal: 15,
+  input: {
+    height: 40,
+    borderColor: 'gray',
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    padding: 10,
+  },
+  placeholder: {
+    position: 'absolute',
+    left: 10,
+    fontSize: 16,
+    color: 'gray',
   },
 });
 
-export default App;
+export default FloatingLabelTextInput;

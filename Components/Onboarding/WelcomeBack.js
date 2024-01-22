@@ -1,10 +1,39 @@
-// ImageContentPage.js
-
 import React from 'react';
-import { Button, View, TextInput, Text, StyleSheet } from 'react-native';
+import { useQuery, useRealm } from '@realm/react';
+import { Button, View, TextInput, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
-
-const ImageContentPage = () => {
+import useStore from '../../Zustand'
+import { useState } from 'react';
+const ImageContentPage = ({route,navigation}) => {
+  const setter = useStore((state)=>state.setter);
+  const [passcode,setPasscode]=useState(['','','','']);
+  const [error1,setError1]=useState(false);
+  const [error2,setError2]=useState(false);
+  const realm=useRealm();
+  const email=route.params.email;
+  const person = realm.objects('User').filtered('email = $0', email)[0];
+  console.log("person: ",person)
+  const handlePasscodeChange = (value, index) => {
+    if (/^\d+$/.test(value)) {
+      const newPasscode = [...passcode];
+      newPasscode[index] = value;
+      setPasscode(newPasscode);
+    } else if (value === '') {
+      const newPasscode = [...passcode];
+      newPasscode[index] = value;
+      setPasscode(newPasscode);
+    } else {
+      setError2(true);
+    }
+  };
+  const check=()=>{
+    const enteredPasscode = parseInt(passcode.join(''));
+    if(person.passcode===enteredPasscode)
+    {
+      setter(route.params.email,route.params.name,route.params.nickname)
+      navigation.navigate('HomeTab')
+    }
+  }
   return (
     <View style={{flex:1,backgroundColor:"#D6E4E4", alignItems:'center'}}>
       <View style={{width:324}}>
@@ -15,36 +44,20 @@ const ImageContentPage = () => {
         <Text style={{color:"#0B3C58",fontFamily: "New Rubrik",fontSize: 20,fontWeight: 500,lineHeight: 25,letterSpacing: 0,textAlign: 'left'}}>Enter your 4-Digit Passcode<Text style={{color:"red"}}>*</Text></Text>
         <Text style={{color:"#0B3C58",fontFamily: "New Rubrik",fontSize: 14,fontWeight: 500,lineHeight: 18,letterSpacing: 0,textAlign: 'left'}}>Just checking it's really you!</Text>
         <View style={{height:12}}></View>
-        <View style={styles.passcodeContainer}>
-                <TextInput
-                  style={styles.input}
-                  keyboardType="numeric"
-                  secureTextEntry
-                  maxLength={1}
-                  onChangeText={(text)=>setPasscode(passcode*10+text)}
-                />
-                <TextInput
-                  style={styles.input}
-                  keyboardType="numeric"
-                  secureTextEntry
-                  maxLength={1}
-                  onChangeText={(text)=>setPasscode(passcode*10+text)}
-                />
-                <TextInput
-                  style={styles.input}
-                  keyboardType="numeric"
-                  secureTextEntry
-                  maxLength={1}
-                  onChangeText={(text)=>setPasscode(passcode*10+text)}
-                />
-                <TextInput
-                  style={styles.input}
-                  keyboardType="numeric"
-                  secureTextEntry
-                  maxLength={1}
-                  onChangeText={(text)=>setPasscode(passcode*10+text)}
-                />
-              </View>
+        <View style={{ flexDirection: 'row' }}>
+            {passcode.map((digit, index) => (
+            <TextInput
+              key={index}
+              style={styles.input}
+              keyboardType="numeric"
+              maxLength={1}
+              value={digit}
+              secureTextEntry={true}
+              onChangeText={(text) => handlePasscodeChange(text, index)}
+            />
+              ))}
+        </View>
+        <TouchableOpacity style={{justifyContent:"center",height:48,backgroundColor:"#0B3C58",borderRadius:8}} onPress={check} ><Text style={{textAlign:"center", fontSize:18,color:"white"}}>Continue</Text></TouchableOpacity>
       </View>
     </View>
   );

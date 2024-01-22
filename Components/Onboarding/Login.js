@@ -1,5 +1,5 @@
 import React , {useState }from 'react';
-import User from '../Schema';
+import { useQuery, useRealm } from '@realm/react';
 import { View, TextInput,Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
 const ImageContentPage = ({navigation} ) => {
   const [isChecked, setChecked] = useState(false);
@@ -7,13 +7,14 @@ const ImageContentPage = ({navigation} ) => {
   const handleCheckboxToggle = () => {
     setChecked(!isChecked);
   };
-  const realm=User.useRealm();
+  const realm = useRealm();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [nickName, setNickName] = useState('');
   const [error1, setError1] = useState(false);
   const [error2, setError2] = useState(false);
   const [error3, setError3] = useState(false);
+  const [error4, setError4] = useState(false);
   const handleNameChange = (value) => {
     setName(value);
       const alphabetRegex = /^[a-zA-Z]+$/;
@@ -38,6 +39,7 @@ const ImageContentPage = ({navigation} ) => {
   };
   const checkEmail = (value) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setError4(false);
     setEmail(value);
     if(value==="")
       setError3(false);
@@ -47,15 +49,18 @@ const ImageContentPage = ({navigation} ) => {
         setError3(true);
       }
   };
-  const Continue=()=>{
-    console.log(name,nickName,email);
-    realm.write(()=>{
-      realm.create('User',{email:email,name:name,nickname:nickName});
-    });
-    navigation.navigate('Passcode', {
-      email:email
-    });
-  }
+  const Continue = () => {
+        const existingUser = realm.objects('User').filtered('email = $0', email)[0];
+  
+        if (existingUser) {
+          setError4(true);
+        }
+      navigation.navigate('Passcode', {
+        email: email,
+        name:name,
+        nickname:nickName,
+      });
+    }
   return (
     <View style={{flex:1,backgroundColor:"#D6E4E4",justifyContent:'space-between'}}>
         <View style={{marginLeft:30,justifyContent:'space-between'}}>
@@ -97,6 +102,7 @@ const ImageContentPage = ({navigation} ) => {
             keyboardType="email-address"
             />
             {error3===true &&<View style={{ flexDirection: 'row'}}><Image source={require('../images/error.png')}/><Text style={{ color: 'red' }}>Invalid Email</Text></View> }
+            {error4===true &&<View style={{ flexDirection: 'row'}}><Image source={require('../images/error.png')}/><Text style={{ color: 'red' }}>Email already in use</Text></View> }
           </View>
         </View>
         <View style={{height:146,justifyContent:'center',alignItems:'center',backgroundColor:'white'}}>
@@ -106,7 +112,7 @@ const ImageContentPage = ({navigation} ) => {
               {isChecked && <Text style={styles.tickMark}>&#10004;</Text>}</Text></TouchableOpacity>
               <Text> Tick this box to confirm you are atleast 18 years old and agree to our <Text style={{color:isChecked===false?'black':"red"}}>terms and conditions</Text></Text>
             </View>
-            <View style={{margin:10,width:284}}><TouchableOpacity style={{justifyContent:"center",height:48,backgroundColor:"#0B3C58",borderRadius:8}} onPress={Continue}  disabled={(name===""||email==="")?true:(!isChecked
+            <View style={{margin:10,width:284}}><TouchableOpacity style={{justifyContent:"center",height:48,backgroundColor:email===''||name===''?'#B0B0B0':error1||error2||error3||!isChecked?'#B0B0B0':'#0B3C58',borderRadius:8}} onPress={Continue}  disabled={(name===""||email==="")?true:(!isChecked
             ||error1||error2||error3)?true:false} ><Text style={{textAlign:"center", fontSize:18,color:"white"}}>Continue</Text></TouchableOpacity></View>
           </View>
         </View>
