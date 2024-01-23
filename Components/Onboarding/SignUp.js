@@ -13,10 +13,13 @@ const ImageContentPage = ({navigation} ) => {
     setUsers(people);
   }, [realm]);
 
+  const peo = realm.objects('User');
+  const veh= realm.objects('Vehicle');
+  const fuel=realm.objects('Fuel');
+  console.log("people: ",peo,"Vehicles: ",veh,"fuels: ",fuel)
 const del = () => {
-  const people = realm.objects('User');
   realm.write(() => {
-    realm.delete(people);
+    realm.delete(veh);
   });
 };
 
@@ -58,11 +61,11 @@ const del = () => {
           {
               users.map((person)=>{return <TouchableOpacity key={person.id} style={styles.Image} onPress={()=>{
               if(person.passcode===10001){
-                setter(person.email,person.name,person.nickname);
+                setter(person.id,person.email,person.name,person.nickname);
                 navigation.navigate('HomeTab')
               }
               else
-              navigation.navigate('WelcomeBack', {email: person.email,name:person.name,nickname:person.nickname})}}><Profile navigation={navigation} name={person.name} nickname={person.nickname}/></TouchableOpacity>})
+              navigation.navigate('WelcomeBack', {id:person.id,email: person.email,name:person.name,nickname:person.nickname})}}><Profile navigation={navigation} name={person.name} nickname={person.nickname}/></TouchableOpacity>})
           } 
           <TouchableOpacity style={styles.Image} onPress={()=>{navigation.navigate('Login')}}><View style={{alignItems:"center"}}><Image source={require('../images/add.png')} style={{borderRadius:50,height:100,width:100}}/><View style={{alignItems:"center"}}><Text>Add User</Text></View></View></TouchableOpacity>
         </View>

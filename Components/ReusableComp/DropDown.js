@@ -13,6 +13,7 @@ const App = (props) => {
       defaultButtonText={props.name}
       buttonStyle={props.style}
       renderDropdownIcon={icon}
+      defaultValue={props.default}
       buttonTextStyle={{fontFamily:"New Rubrik",fontSize:16,textAlign:"left",color:"#58798C"}}
     />
   );

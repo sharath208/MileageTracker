@@ -1,33 +1,25 @@
 import React , {useEffect,useState }from 'react';
-import Drawer from '../ReusableComp/Drawer';
+import DropDown from '../ReusableComp/DropDown';
 import AddVehicle from '../Vehicle/AddVehicle';
 import useStore  from '../../Zustand';
 import { useRealm } from '@realm/react';
-import vehicleFrame from '../Vehicle/vehicleframes';
+import VehicleFrame from '../Vehicle/vehicleframes';
+import AddRefuel from '../Refuel/addRefuel';
 import { Button, View, TextInput,Image, Text, StyleSheet, TouchableOpacity } from 'react-native';
 const Home = ({navigation}) => {
+  const [vehicles,setVehicles]=useState([]);
   const [selectedVehicle,setSelectedVehicleType]=useState(null);
-  const [vehicles,setVehicles]=useState(null);
   const realm=useRealm();
-  const email= useStore((state) => state.email);
-  console.log(email)
-  const person = realm.objects('User').filtered('email = $0', email)[0];
-  console.log(person)
+  const {id,name,nickname}=useStore()
   useEffect(() => {
-    const vehicleObjs=person.vehicles;
-    setVehicles(vehicleObjs);
+    const allvehicles = realm.objects('Vehicle').filtered('userId = $0', id);
+    setVehicles(allvehicles)
   }, [realm]);
-  console.log(vehicles)
-  /* let vehicleNames=[];
-  if(vehicles!==undefined){
-    vehicleNames=vehicles.map((vehicle)=>{vehicle.name});
-  } */
+  const vehiclenames=vehicles.map((vehicle)=>{return vehicle.name})
   return (
-    <View style={{flex:1,backgroundColor:"#D0EAEA",justifyContent:'space-between'}}>
-      <View>
-        <View style={{height:36}}></View>
-        <View style={{height:28,flexDirection:"row",justifyContent:"space-between"}}>
-          <TouchableOpacity onPress={()=>{ navigation.navigate('SignUp') }}><Image source={require('../images/Large.png')}/></TouchableOpacity>
+    <View style={{flex:1,backgroundColor:"#D0EAEA"}}>
+        <View style={{marginTop:36,height:28,flexDirection:"row",justifyContent:"space-between"}}>
+          <TouchableOpacity onPress={()=>{ navigation.navigate('SignUp') }}><Image source={require('../images/profile.png')}/></TouchableOpacity>
           <Image source={require('../images/Union.png')}></Image>
           <Text style={{width:10}}></Text>
         </View>
@@ -36,27 +28,32 @@ const Home = ({navigation}) => {
           <View style={{width:324}}>
             <View>
               <Text style={{color:'#EB655F',fontFamily: "New Rubrik",fontSize: 22,fontWeight: 400,lineHeight: 28,letterSpacing: 0,textAlign:'center',
-              }}>Hi {person.nickname===""?person.name:person.nickname},</Text>
+              }}>Hi {nickname===""?name:nickname},</Text>
             </View>
             <View style={{height:8}}></View>
             { 
-            vehicles===undefined?
-              <View><Text style={{color:'#0B3C58',fontFamily: "New Rubrik",fontSize: 16,fontWeight: 400,lineHeight: 28,letterSpacing: 0,textAlign:'center',}}>Track your miles towards a prosperous financial journey!</Text>
-            
-              <AddVehicle navigation={navigation}/></View>:
+              vehicles.length===0?
               <View>
-                {/* <Text>Here is everything about your</Text>
-                {selectedVehicle?<View><DropDown
+                <Text style={{color:'#0B3C58',fontFamily: "New Rubrik",fontSize: 16,fontWeight: 400,lineHeight: 28,letterSpacing: 0,textAlign:'center',}}>Track your miles towards a prosperous financial journey!</Text>
+                <AddVehicle navigation={navigation}/>
+              </View>
+              :
+              <View>
+              {
+                <View>
+                  <Text>Here is everything about your {selectedVehicle}</Text>
+                  <DropDown
                   name="Vehicle Type"
-                  list={vehicles}
-                  onSelect={(selectedOption) => setSelectedVehicleType(selectedOption)}
-                  style={styles.input}/>
-                <vehicleFrame name={vehicleNames[vehicles.indexOf(selectedVehicle)]}/></View>:<View></View>}
-               */}</View>
+                  list={vehiclenames}
+                  default={vehiclenames[0]}
+                  onSelect={(selectedOption) => setSelectedVehicleType(selectedOption)}/>
+                  <VehicleFrame name={selectedVehicle}/>
+                </View>
+              }
+              </View>
             }
           </View>
         </View>
-      </View>
     </View>
   );
 };

@@ -5,6 +5,7 @@
  *
  * @format
  */
+import 'react-native-gesture-handler';
 import React from 'react';
 import SignUp from './Components/Onboarding/SignUp';
 import Login from './Components/Onboarding/Login';
@@ -19,32 +20,35 @@ import Refuel from './Components/Refuel/Refuelling.js';
 import Performance from './Components/Performance/Performance.js';
 import addRefuel from './Components/Refuel/addRefuel.js';
 import Vehicles from './Components/Vehicle/Vehicle.js'
-import { RealmProvider } from '@realm/react';
 import {NavigationContainer} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'; 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import realmConfig from './Schema';
+import { RealmProvider } from '@realm/react';
+import RefuelForm from './Components/Refuel/RefuelForm.js'
 import LinearGradient from 'react-native-linear-gradient';
 
 import {
   Text,
   View,
   Image,
-  SafeAreaView
+  SafeAreaView,
+  TouchableOpacity
 } from 'react-native';
 import VehicleForm from './Components/Vehicle/VehicleForm.js';
-/* import { createDrawerNavigator } from '@react-navigation/drawer'; */
+import realmConfig from './Schema.js';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
-/* const Drawer = createDrawerNavigator(); */
+const Drawer = createDrawerNavigator();
 const Stack=createNativeStackNavigator();
 const Tab=createBottomTabNavigator();
-/* const DrawerNav=()=>{
+
+const DrawerNav=()=>{
   return(
     <Drawer.Navigator drawerContent={(props) => <DrawerScreen {...props} />}>
         <Drawer.Screen name="Home" component={Home} />
     </Drawer.Navigator>
   )
-} */
+}
 const Tabnav=()=>{
   return(
       <Tab.Navigator  screenOptions={({ route }) => ({
@@ -60,8 +64,8 @@ const Tabnav=()=>{
           iconName =focused?require('./Components/images/Bottom_tab/Vehicles/filled.png'):require('./Components/images/Bottom_tab/Vehicles/unfilled.png');
         return <Image source={iconName} style={{ tintColor:"#0B3C58"}} />
         },})}>
-        <Tab.Screen name="Home" component={Home} options={{tabBarActiveTintColor: '#58798C',}}></Tab.Screen>
-        <Tab.Screen name='Refuelling' component={Refuel} options={{tabBarActiveTintColor: '#58798C',}}></Tab.Screen>
+        <Tab.Screen name="Home" component={DrawerNav} options={{tabBarActiveTintColor: '#58798C',}}></Tab.Screen>
+        <Tab.Screen name='Refuelling' component={Refuel} options={{headerShown:false,tabBarActiveTintColor: '#58798C',}}></Tab.Screen>
         <Tab.Screen name='Performance' component={Performance} options={{tabBarActiveTintColor: '#58798C',}}></Tab.Screen>
         <Tab.Screen name='Vehicles' component={Vehicles} options={{tabBarActiveTintColor: '#58798C'}}></Tab.Screen>
       </Tab.Navigator>
@@ -69,15 +73,18 @@ const Tabnav=()=>{
 } 
 const App=()=> {
   return (
+
     <RealmProvider config={realmConfig}>
       <NavigationContainer> 
-        <Stack.Navigator initialRouteName='VehicleForm'>
+        <Stack.Navigator >
           <Stack.Screen name="SignUp" component={SignUp}/>
           <Stack.Screen name="Login" component={Login}/>
           <Stack.Screen name="Passcode" component={Passcode}/>
           <Stack.Screen name="WelcomeBack" component={WelcomeBack}/>
           <Stack.Screen name="HomeTab" component={Tabnav} options={{headerShown:false}}/>
-          <Stack.Screen name="VehicleForm" component={VehicleForm} options={{headerStyle: {backgroundColor: '#f4511e',},}}/>
+          <Stack.Screen name="VehicleForm" component={VehicleForm} options={{title:"",headerTitle:()=><TouchableOpacity onPress={()=>navigation.goBack()}><Image source={require('./Components/images/leftArrow.png')}/></TouchableOpacity>,headerStyle: {backgroundColor: '#F93333',},}}/>
+          <Stack.Screen name="addRefuel" component={addRefuel}/>
+          <Stack.Screen name="RefuelForm" component={RefuelForm}/>
         </Stack.Navigator>
       </NavigationContainer>
     </RealmProvider>

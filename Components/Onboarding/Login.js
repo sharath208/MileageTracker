@@ -56,11 +56,16 @@ const ImageContentPage = ({navigation} ) => {
           setError4(true);
         }
       navigation.navigate('Passcode', {
+        id:new Realm.BSON.ObjectId,
         email: email,
         name:name,
         nickname:nickName,
       });
     }
+    const peo = realm.objects('User');
+  const veh= realm.objects('Vehicle');
+  const fuel=realm.objects('Fuel');
+  console.log("people: ",peo,"Vehicles: ",veh,"fuels: ",fuel)
   return (
     <View style={{flex:1,backgroundColor:"#D6E4E4",justifyContent:'space-between'}}>
         <View style={{marginLeft:30,justifyContent:'space-between'}}>

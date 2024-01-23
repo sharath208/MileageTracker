@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import ImagePicker from 'react-native-image-picker';
-import Modal from "react-native-modal";
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import DropDown from '../ReusableComp/DropDown';
@@ -14,6 +12,10 @@ const VehicleForm = ({navigation}) => {
     const {id}= useStore();
     const [selectedVehicleType, setSelectedVehicleType] = useState(null);
     const [isModalVisible, setModalVisible] = useState(false);
+    const [chosenDate, setChosenDate] = useState(new Date());
+    const handleDateChange = (newDate) => {
+        setChosenDate(newDate);
+    };
     const toggleModal = () => {
       setModalVisible(!isModalVisible);
     };
@@ -74,42 +76,60 @@ const VehicleForm = ({navigation}) => {
   return (
     <View style={{height:"100%",backgroundColor:"#F0F2F2",justifyContent:"space-between"}}>
         <View style={{alignItems:"center"}}>
-            <Text style={{color:"#0B3C58",textAlign:"center", fontSize:20,fontFamily:"New Rubrik",fontWeight:"500"}}>Add Vehicle</Text>
-            <View style={{marginTop:36}}>
-                <TouchableOpacity onPress={toggleModal}>{imageSource && <Image source={imageSource} style={{ width: 200, height: 200 }} />}<Image source={require('../images/addPhoto.png')}/></TouchableOpacity>
-            </View>
-            <Modal isVisible={isModalVisible} onBackdropPress={toggleModal} style={{backgroundColor:'white',alignItems:"center",flexDirection:"row",justifyContent:"space-around",height:"30%"}}>
-              <View style={{height:"30%"}}>
-                <TouchableOpacity style={{justifyContent:"center",height:48,backgroundColor:"#0B3C58",borderRadius:8}} onPress={()=>{navigation.navigate('Login')}} ><Text style={{textAlign:"center", fontSize:18,color:"white"}}>Open Gallery</Text></TouchableOpacity>
-                <TouchableOpacity style={{justifyContent:"center",height:48,backgroundColor:"#0B3C58",borderRadius:8}} onPress={()=>{navigation.navigate('Login')}} ><Text style={{textAlign:"center", fontSize:18,color:"white"}}>Open Camera</Text></TouchableOpacity>
-              </View>
-            </Modal>
+            <Text style={{color:"#0B3C58",textAlign:"center", fontSize:20,fontFamily:"New Rubrik",fontWeight:"500"}}>Add Refuelling Record</Text>
+            
             <View style={{marginTop:24,marginBottom:24}}>
-            <TextInput
-                backgroundColor="white"
-                style={styles.input}
-                placeholder='Vehicle Name'
-                onChangeText={(text) => setName(text)}
-                value={name}
-            /></View>
             <DropDown
-                name="Vehicle Type"
+                name="Vehicle Name"
                 list={["2 wheeler", "3 wheeler", '4 wheeler', 'other']}
                 onSelect={(selectedOption) => setSelectedVehicleType(selectedOption)}
                 style={styles.input}/>
-            <View style={{marginTop:24}}>
             <TextInput
                 backgroundColor="white"
                 style={styles.input}
-                placeholder='Engine CC'
-                onChangeText={(text) => setEngine(text)}
-                value={engine}
+                placeholder='Refuelling Date'
+                onChangeText={(text) => setName(text)}
+                value={name}
             /></View>
+            <Text>Odometer Details</Text>
+            <View style={{width:"80%",marginTop:24,flexDirection:"row"}}>
+                <TextInput
+                    backgroundColor="white"
+                    style={{...styles.input,flex:1}}
+                    placeholder='Start reading'
+                    onChangeText={(text) => setEngine(text)}
+                    value={engine}
+                />
+                <TextInput
+                    backgroundColor="white"
+                    style={{...styles.input,flex:1}}
+                    placeholder='End reading'
+                    onChangeText={(text) => setEngine(text)}
+                    value={engine}
+                />
+            </View>
+            <Text>Fuel Details</Text>
+            <View style={{width:"80%",marginTop:24,flexDirection:"row"}}>
+                <TextInput
+                    backgroundColor="white"
+                    style={{...styles.input,flex:1}}
+                    placeholder='Consumed(in L)'
+                    onChangeText={(text) => setEngine(text)}
+                    value={engine}
+                />
+                <TextInput
+                    backgroundColor="white"
+                    style={{...styles.input,flex:1}}
+                    placeholder='Price (in $$)'
+                    onChangeText={(text) => setEngine(text)}
+                    value={engine}
+                />
+            </View>
         </View>
         <View style={{alignItems:"center"}}>
             <View style={{marginBottom:10,width:"90%",alignItems:"center",flexDirection:"row",justifyContent:"space-around"}}>
                 <TouchableOpacity style={{width:"48%",justifyContent:"center",height:48,borderColor:"#0B3C58",borderWidth:2,borderRadius:8}} onPress={()=>{navigation.goBack()} }><Text style={{textAlign:"center", fontSize:18,color:"#0B3C58"}}>Cancel</Text></TouchableOpacity>
-                <TouchableOpacity style={{width:"48%",justifyContent:"center",height:48,backgroundColor:name===''||engine===''||selectedVehicleType===null?"#B0B0B0":"#0B3C58",borderRadius:8}} onPress={adder} ><Text style={{textAlign:"center", fontSize:18,color:"white"}}>ADD</Text></TouchableOpacity>
+                <TouchableOpacity style={{width:"48%",justifyContent:"center",height:48,backgroundColor:name===''||engine===''||selectedVehicleType===null?"#B0B0B0":"#0B3C58",borderRadius:8}} onPress={adder} ><Text style={{textAlign:"center", fontSize:18,color:"white"}}>Save</Text></TouchableOpacity>
             </View>
         </View>
     </View>
@@ -119,6 +139,7 @@ const VehicleForm = ({navigation}) => {
 const styles = StyleSheet.create({
     input: {
        color: "#58798C",
+    marginTop:20,
       alignItems:"center",
       justifyContent:"center",
       backgroundColor:"white", 

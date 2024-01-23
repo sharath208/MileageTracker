@@ -3,16 +3,19 @@ import { useQuery, useRealm } from '@realm/react';
 import { Button, View, TextInput, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
 import useStore from '../../Zustand'
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 const ImageContentPage = ({route,navigation}) => {
   const setter = useStore((state)=>state.setter);
   const [passcode,setPasscode]=useState(['','','','']);
+  const [user,setUser]=useState(null);
   const [error1,setError1]=useState(false);
   const [error2,setError2]=useState(false);
   const realm=useRealm();
   const email=route.params.email;
-  const person = realm.objects('User').filtered('email = $0', email)[0];
-  console.log("person: ",person)
+  useEffect(() => {
+    const person = realm.objects('User').filtered('email = $0', email)[0];
+    setUser(person)
+  }, [realm]);
   const handlePasscodeChange = (value, index) => {
     if (/^\d+$/.test(value)) {
       const newPasscode = [...passcode];
@@ -28,9 +31,9 @@ const ImageContentPage = ({route,navigation}) => {
   };
   const check=()=>{
     const enteredPasscode = parseInt(passcode.join(''));
-    if(person.passcode===enteredPasscode)
+    if(user.passcode===enteredPasscode)
     {
-      setter(route.params.email,route.params.name,route.params.nickname)
+      setter(route.params.id,route.params.email,route.params.name,route.params.nickname)
       navigation.navigate('HomeTab')
     }
   }

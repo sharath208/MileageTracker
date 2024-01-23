@@ -4,10 +4,11 @@ import { View, TextInput, Button, StyleSheet, Image,Text, TouchableOpacity} from
 import useStore from '../../Zustand';
 const PasscodeSetupScreen = ({route,navigation}) => {
   const setter = useStore((state)=>state.setter);
-  const email=route.params.email;
-  const name=route.params.name;
-  const nickname=route.params.nickname;
   const realm=useRealm();
+  const peo = realm.objects('User');
+  const veh= realm.objects('Vehicle');
+  const fuel=realm.objects('Fuel');
+  console.log("people: ",peo,"Vehicles: ",veh,"fuels: ",fuel)
   const [passcode,setPasscode]=useState(['','','','']);
   const [check,setCheck]=useState(['','','','']);
   const [error1,setError1]=useState(false);
@@ -46,9 +47,9 @@ const PasscodeSetupScreen = ({route,navigation}) => {
 
     if (!isNaN(enteredPasscode) && !isNaN(enteredConfirmPasscode) && enteredPasscode === enteredConfirmPasscode && enteredPasscode.toString().length === 4) 
     {
-      setter(route.params.email,route.params.name,route.params.nickname)
+      setter(route.params.id,route.params.email,route.params.name,route.params.nickname)
       realm.write(() => {
-        realm.create('User', {id:new Realm.BSON.ObjectId(), name: name, email:email,nickname:nickname,passcode:enteredPasscode,vehicles:[]});
+        realm.create('User', {id:route.params.id, name:route.params.name, email:route.params.email,nickname:route.params.nickname,passcode:enteredPasscode});
       });
       navigation.navigate('HomeTab');
     } 
@@ -57,9 +58,9 @@ const PasscodeSetupScreen = ({route,navigation}) => {
     }
   }
   const handleSkip = () => {
-    setter(route.params.email,route.params.name,route.params.nickname)
+    setter(route.params.id,route.params.email,route.params.name,route.params.nickname)
     realm.write(() => {
-      realm.create('User', {id:new Realm.BSON.ObjectId(), name: name, email:email,nickname:nickname,vehicles:[]});
+      realm.create('User', {id:route.params.id, name:route.params.name, email:route.params.email,nickname:route.params.nickname,passcode:10001});
     });
     navigation.navigate('HomeTab')
   };
