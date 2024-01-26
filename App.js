@@ -15,28 +15,22 @@ import WelcomeBack from './Components/Onboarding/WelcomeBack.js'
 import Landing from './Components/Landing.js';
 import Test from './Components/test.js';
 import Test2 from './Components/Test2.js';
-import DrawerScreen from './Components/ReusableComp/Drawer.js' 
+import DrawerScreen from './Components/Home/Drawer.js' 
 import Refuel from './Components/Refuel/Refuelling.js';
 import Performance from './Components/Performance/Performance.js';
 import addRefuel from './Components/Refuel/addRefuel.js';
 import Vehicles from './Components/Vehicle/Vehicle.js'
+import VehicleForm from './Components/Vehicle/VehicleForm.js';
+import Chart from './Components/Home/Chart.js'
 import {NavigationContainer} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'; 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { RealmProvider } from '@realm/react';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import RefuelForm from './Components/Refuel/RefuelForm.js'
 import LinearGradient from 'react-native-linear-gradient';
-
-import {
-  Text,
-  View,
-  Image,
-  SafeAreaView,
-  TouchableOpacity
-} from 'react-native';
-import VehicleForm from './Components/Vehicle/VehicleForm.js';
+import {Image,} from 'react-native';
+import { RealmProvider } from '@realm/react';
 import realmConfig from './Schema.js';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 
 const Drawer = createDrawerNavigator();
 const Stack=createNativeStackNavigator();
@@ -45,10 +39,29 @@ const Tab=createBottomTabNavigator();
 const DrawerNav=()=>{
   return(
     <Drawer.Navigator drawerContent={(props) => <DrawerScreen {...props} />}>
-        <Drawer.Screen name="Home" component={Home} />
+        <Drawer.Screen name="HomeScreen" component={Home} options={{headerShown:false}} />
     </Drawer.Navigator>
   )
 }
+
+const VehNav=()=>{
+  return(
+    <Stack.Navigator>
+      <Stack.Screen name="VehiclesTab" component={Vehicles}/>
+      <Stack.Screen name="VehicleForm" component={VehicleForm} />
+    </Stack.Navigator>
+  )
+}
+
+const RefNav=()=>{
+  return(
+    <Stack.Navigator>
+      <Stack.Screen name="RefuelTab" component={Refuel}/>
+      <Stack.Screen name="RefuelForm" component={RefuelForm}/>
+    </Stack.Navigator>
+  )
+}
+
 const Tabnav=()=>{
   return(
       <Tab.Navigator  screenOptions={({ route }) => ({
@@ -56,7 +69,7 @@ const Tabnav=()=>{
         let iconName;
         if (route.name === 'Home')
           iconName =focused?require('./Components/images/Bottom_tab/Home/filled.png'):require('./Components/images/Bottom_tab/Home/unfilled.png');
-        else if (route.name === 'Refuelling')
+        else if (route.name === 'Refuel')
           iconName =focused?require('./Components/images/Bottom_tab/Refuel/filled.png'):require('./Components/images/Bottom_tab/Refuel/unfilled.png'); 
         else if(route.name === 'Performance')
           iconName =focused?require('./Components/images/Bottom_tab/Performance/filled.png'):require('./Components/images/Bottom_tab/Performance/unfilled.png');
@@ -64,10 +77,10 @@ const Tabnav=()=>{
           iconName =focused?require('./Components/images/Bottom_tab/Vehicles/filled.png'):require('./Components/images/Bottom_tab/Vehicles/unfilled.png');
         return <Image source={iconName} style={{ tintColor:"#0B3C58"}} />
         },})}>
-        <Tab.Screen name="Home" component={DrawerNav} options={{tabBarActiveTintColor: '#58798C',}}></Tab.Screen>
-        <Tab.Screen name='Refuelling' component={Refuel} options={{headerShown:false,tabBarActiveTintColor: '#58798C',}}></Tab.Screen>
+        <Tab.Screen name="Home" component={DrawerNav} options={{headerShown:false,tabBarActiveTintColor: '#58798C',}}></Tab.Screen>
+        <Tab.Screen name='Refuel' component={RefNav} options={{headerShown:false,tabBarActiveTintColor: '#58798C',}}></Tab.Screen>
         <Tab.Screen name='Performance' component={Performance} options={{tabBarActiveTintColor: '#58798C',}}></Tab.Screen>
-        <Tab.Screen name='Vehicles' component={Vehicles} options={{tabBarActiveTintColor: '#58798C'}}></Tab.Screen>
+        <Tab.Screen name='Vehicle' component={VehNav} options={{headerShown:false,tabBarActiveTintColor: '#58798C'}}></Tab.Screen>
       </Tab.Navigator>
   )
 } 
@@ -77,14 +90,12 @@ const App=()=> {
     <RealmProvider config={realmConfig}>
       <NavigationContainer> 
         <Stack.Navigator >
+        <Stack.Screen name="Chart" component={Chart}/>
           <Stack.Screen name="SignUp" component={SignUp}/>
           <Stack.Screen name="Login" component={Login}/>
           <Stack.Screen name="Passcode" component={Passcode}/>
           <Stack.Screen name="WelcomeBack" component={WelcomeBack}/>
           <Stack.Screen name="HomeTab" component={Tabnav} options={{headerShown:false}}/>
-          <Stack.Screen name="VehicleForm" component={VehicleForm} options={{title:"",headerTitle:()=><TouchableOpacity onPress={()=>navigation.goBack()}><Image source={require('./Components/images/leftArrow.png')}/></TouchableOpacity>,headerStyle: {backgroundColor: '#F93333',},}}/>
-          <Stack.Screen name="addRefuel" component={addRefuel}/>
-          <Stack.Screen name="RefuelForm" component={RefuelForm}/>
         </Stack.Navigator>
       </NavigationContainer>
     </RealmProvider>

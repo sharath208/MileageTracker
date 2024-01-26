@@ -1,4 +1,4 @@
-import {Realm} from '@realm/react';
+import {Realm,createRealmContext} from '@realm/react';
 class User extends Realm.Object{
     static schema={
         name:'User',
@@ -22,6 +22,7 @@ class Vehicle extends Realm.Object{
             name:'string',
             engine:'string',
             type:'string',
+            imageSource:'string',
         },
         primaryKey:'id'
     }
@@ -45,33 +46,17 @@ class Fuel extends Realm.Object{
 
 const realmConfig = {
     schema: [User, Vehicle, Fuel],
-    schemaVersion: 46,
+    schemaVersion: 55,
     onMigration: (oldRealm, newRealm) => {
-        if (oldRealm.schemaVersion < 44) {
-          const oldObjects = oldRealm.objects(User);
-          const newObjects = newRealm.objects(User);
-          for (const objectIndex in oldObjects) {
-            const oldObject = oldObjects[objectIndex];
-            const newObject = newObjects[objectIndex];
-            newObject.id = new Realm.BSON.ObjectId(oldObject._id);
-          }
-        }
-        if (oldRealm.schemaVersion < 45) {
-            const oldObjects = oldRealm.objects(Vehicle);
-            const newObjects = newRealm.objects(Vehicle);
-            for (const objectIndex in oldObjects) {
-              const oldObject = oldObjects[objectIndex];
-              const newObject = newObjects[objectIndex];
-              newObject.id = new Realm.BSON.ObjectId(oldObject._id);
-            }
-          }
-          if (oldRealm.schemaVersion < 46) {
-            const oldObjects = oldRealm.objects(Fuel);
-            const newObjects = newRealm.objects(Fuel);
-            for (const objectIndex in oldObjects) {
-              const oldObject = oldObjects[objectIndex];
-              const newObject = newObjects[objectIndex];
-              newObject.id = new Realm.BSON.ObjectId(oldObject._id);
+        console.log('Re Migration function executed');
+        if (oldRealm.schemaVersion < 55) {
+            const oldObjects = oldRealm.objects('Vehicle');
+            const newObjects = newRealm.objects('Vehicle');
+            for (let i = 0; i < oldObjects.length; i++) {
+                const oldObject = oldObjects[i];
+                const newObject = newObjects[i];
+                newObject.imageSource = "";
+                console.log('After Migration:', newObject.imageSource);
             }
           }
       },

@@ -7,7 +7,7 @@ import DropDown from '../ReusableComp/DropDown';
 import useStore from '../../Zustand';
 import { useRealm } from '@realm/react';
 const VehicleForm = ({navigation}) => {
-    const [imageSource, setImageSource] = useState(null);
+    const [imageSource, setImageSource] = useState("");
     const realm=useRealm();
     const [name,setName]=useState("");
     const [engine,setEngine]=useState("");
@@ -34,16 +34,18 @@ const VehicleForm = ({navigation}) => {
           } else {
             let imageUri = response.uri || response.assets?.[0]?.uri;
             setImageSource(imageUri);
+            console.log(imageUri);
           }
         });
       };
-      handleCameraLaunch = () => {
+    const handleCameraLaunch = () => {
         toggleModal();
         const options = {
           mediaType: 'photo',
           includeBase64: false,
           maxHeight: 2000,
           maxWidth: 2000,
+          saveToPhotos:true,
         };
       
         launchCamera(options, response => {
@@ -53,7 +55,7 @@ const VehicleForm = ({navigation}) => {
             console.log('Camera Error: ', response.error);
           } else {
             let imageUri = response.uri || response.assets?.[0]?.uri;
-            setSelectedImage(imageUri);
+            setImageSource(imageUri);
             console.log(imageUri);
           }
         });
@@ -66,6 +68,7 @@ const VehicleForm = ({navigation}) => {
                 name: name,
                 engine: engine,
                 type: selectedVehicleType,
+                imageSource:imageSource,
             });
           });
         navigation.goBack();
@@ -76,12 +79,12 @@ const VehicleForm = ({navigation}) => {
         <View style={{alignItems:"center"}}>
             <Text style={{color:"#0B3C58",textAlign:"center", fontSize:20,fontFamily:"New Rubrik",fontWeight:"500"}}>Add Vehicle</Text>
             <View style={{marginTop:36}}>
-                <TouchableOpacity onPress={toggleModal}>{imageSource && <Image source={imageSource} style={{ width: 200, height: 200 }} />}<Image source={require('../images/addPhoto.png')}/></TouchableOpacity>
+                <TouchableOpacity onPress={toggleModal}>{imageSource!=="" ? <Image source={{uri:imageSource}} style={{ width: 150, height: 150, }} />:<Image source={require('../images/addPhoto.png')}/>}</TouchableOpacity>
             </View>
             <Modal isVisible={isModalVisible} onBackdropPress={toggleModal} style={{backgroundColor:'white',alignItems:"center",flexDirection:"row",justifyContent:"space-around",height:"30%"}}>
               <View style={{height:"30%"}}>
-                <TouchableOpacity style={{justifyContent:"center",height:48,backgroundColor:"#0B3C58",borderRadius:8}} onPress={()=>{navigation.navigate('Login')}} ><Text style={{textAlign:"center", fontSize:18,color:"white"}}>Open Gallery</Text></TouchableOpacity>
-                <TouchableOpacity style={{justifyContent:"center",height:48,backgroundColor:"#0B3C58",borderRadius:8}} onPress={()=>{navigation.navigate('Login')}} ><Text style={{textAlign:"center", fontSize:18,color:"white"}}>Open Camera</Text></TouchableOpacity>
+                <TouchableOpacity style={{justifyContent:"center",height:48,backgroundColor:"#0B3C58",borderRadius:8}} onPress={openImagePicker} ><Text style={{textAlign:"center", fontSize:18,color:"white"}}>Open Gallery</Text></TouchableOpacity>
+                <TouchableOpacity style={{justifyContent:"center",height:48,backgroundColor:"#0B3C58",borderRadius:8}} onPress={handleCameraLaunch}><Text style={{textAlign:"center", fontSize:18,color:"white"}}>Open Camera</Text></TouchableOpacity>
               </View>
             </Modal>
             <View style={{marginTop:24,marginBottom:24}}>

@@ -16,7 +16,7 @@ const ImageContentPage = ({navigation} ) => {
   const peo = realm.objects('User');
   const veh= realm.objects('Vehicle');
   const fuel=realm.objects('Fuel');
-  console.log("people: ",peo,"Vehicles: ",veh,"fuels: ",fuel)
+  console.log("\npeople: \n",peo,"\nVehicles: \n",veh,"\nfuels: \n",fuel)
 const del = () => {
   realm.write(() => {
     realm.delete(veh);
@@ -24,8 +24,7 @@ const del = () => {
 };
 
   return (
-    <ScrollView>
-    <View style={{alignItems:"center",flex:1,backgroundColor:"#D6E4E4",}}>
+    <ScrollView style={{flex:1,backgroundColor:"#D6E4E4",}} contentContainerStyle={{alignItems:"center",}}>
       <TouchableOpacity onPress={del}><Text>Delete all</Text></TouchableOpacity>
       <View style={{height:52}}></View>
        <View style={styles.TopImage}>
@@ -71,7 +70,6 @@ const del = () => {
         </View>
       </View>
       }
-      </View>
       </ScrollView>
   );
 };
