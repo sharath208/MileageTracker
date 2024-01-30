@@ -56,7 +56,7 @@ const del = () => {
       <View style={{width:"80%",alignItems:"center"}}>
         <View style={{height:200}}></View>
         <Text style={{fontSize:25,color:'#0B3C58',fontFamily:"New Rubrik"}}>Who are you?</Text>
-        <View style={{flexDirection:"row",flexWrap:"wrap",justifyContent:"space-evenly"}}>
+        <View style={{marginTop:"7%",flexDirection:"row",flexWrap:"wrap",justifyContent:"space-evenly"}}>
           {
               users.map((person)=>{return <TouchableOpacity key={person.id} style={styles.Image} onPress={()=>{
               if(person.passcode===10001){
@@ -64,7 +64,7 @@ const del = () => {
                 navigation.navigate('HomeTab')
               }
               else
-              navigation.navigate('WelcomeBack', {id:person.id,email: person.email,name:person.name,nickname:person.nickname})}}><Profile navigation={navigation} name={person.name} nickname={person.nickname}/></TouchableOpacity>})
+              navigation.navigate('WelcomeBack', {id:person.id,email: person.email,name:person.name,nickname:person.nickname})}}><Profile name={person.name} nickname={person.nickname}/></TouchableOpacity>})
           } 
           <TouchableOpacity style={styles.Image} onPress={()=>{navigation.navigate('Login')}}><View style={{alignItems:"center"}}><Image source={require('../images/add.png')} style={{borderRadius:50,height:100,width:100}}/><View style={{alignItems:"center"}}><Text>Add User</Text></View></View></TouchableOpacity>
         </View>

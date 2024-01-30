@@ -1,7 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
 import { View, Text, TouchableOpacity,Image,Modal,StyleSheet } from 'react-native';
-import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import useStore from '../../Zustand'
 const DrawerContent = (props) => {
   const [msg,setMsg]=useState("");

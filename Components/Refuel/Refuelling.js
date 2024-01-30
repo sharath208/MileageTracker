@@ -57,11 +57,11 @@ const Refuel = ({navigation}) => {
                 <View style={{marginTop:"7%"}}>
                   <Text>{fuels.length} Record{fuels.length===1?'':'s'} |</Text>
                 </View>
-                    {fuels.map((fuel)=>{return <View style={{height:"30%"}} key={fuel.id} ><RefuelProfile fuel={fuel.fuel} cost={fuel.price} date={fuel.date}/></View>})}
+                  {fuels.map((fuel)=>{return <TouchableOpacity key={fuel.id} onPress={()=>{navigation.navigate('RefuelEdit',{name:selectedVehicleType,date:fuel.date,price:fuel.price,odostart:fuel.odostart,odoend:fuel.odoend,fuelConsumed:fuel.fuelConsumed});}}><View style={{height:"30%"}}  ><RefuelProfile fuel={fuel.fuelConsumed} cost={fuel.price} date={fuel.date.toLocaleString()}/></View></TouchableOpacity>})}
               </View>
             }
 
-            <View style={{width:"100%",alignItems:"flex-end"}}><TouchableOpacity onPress={()=>{navigation.navigate('RefuelForm')}}><Image source={require('../images/add.png')}/></TouchableOpacity></View>
+            <View style={{width:"100%",alignItems:"flex-end"}}><TouchableOpacity onPress={()=>{navigation.navigate('RefuelForm',{data:{}})}}><Image source={require('../images/add.png')}/></TouchableOpacity></View>
           </View>
         }
     </ScrollView>

@@ -1,12 +1,13 @@
 import React from 'react';
 import { useQuery, useRealm } from '@realm/react';
-import { Button, View, TextInput, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Button,Image, View, TextInput, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
 import useStore from '../../Zustand'
+import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 import { useState,useEffect } from 'react';
 const ImageContentPage = ({route,navigation}) => {
   const setter = useStore((state)=>state.setter);
-  const [passcode,setPasscode]=useState(['','','','']);
+  const [passcode,setPasscode]=useState('');
   const [user,setUser]=useState(null);
   const [error1,setError1]=useState(false);
   const [error2,setError2]=useState(false);
@@ -16,16 +17,11 @@ const ImageContentPage = ({route,navigation}) => {
     const person = realm.objects('User').filtered('email = $0', email)[0];
     setUser(person)
   }, [realm]);
-  const handlePasscodeChange = (value, index) => {
-    if (/^\d+$/.test(value)) {
-      const newPasscode = [...passcode];
-      newPasscode[index] = value;
-      setPasscode(newPasscode);
-    } else if (value === '') {
-      const newPasscode = [...passcode];
-      newPasscode[index] = value;
-      setPasscode(newPasscode);
-    } else {
+  const handlePasscodeChange = (code) => {
+    if (/^\d+$/.test(code)) {
+      setPasscode(code)
+    }
+    else{
       setError2(true);
     }
   };
@@ -35,6 +31,9 @@ const ImageContentPage = ({route,navigation}) => {
     {
       setter(route.params.id,route.params.email,route.params.name,route.params.nickname)
       navigation.navigate('HomeTab')
+    }
+    else{
+      setError1(true);
     }
   }
   return (
@@ -48,19 +47,16 @@ const ImageContentPage = ({route,navigation}) => {
         <Text style={{color:"#0B3C58",fontFamily: "New Rubrik",fontSize: 14,fontWeight: 500,lineHeight: 18,letterSpacing: 0,textAlign: 'left'}}>Just checking it's really you!</Text>
         <View style={{height:12}}></View>
         <View style={{ flexDirection: 'row' }}>
-            {passcode.map((digit, index) => (
-            <TextInput
-              key={index}
-              style={styles.input}
-              keyboardType="numeric"
-              maxLength={1}
-              value={digit}
-              secureTextEntry={true}
-              onChangeText={(text) => handlePasscodeChange(text, index)}
-            />
-              ))}
+          <SmoothPinCodeInput
+            value={passcode}
+            onTextChange={handlePasscodeChange}
+            codeLength={4}
+            cellStyle={{ borderBottomWidth: 2, borderColor: 'gray' }}
+          />    
         </View>
         <TouchableOpacity style={{justifyContent:"center",height:48,backgroundColor:"#0B3C58",borderRadius:8}} onPress={check} ><Text style={{textAlign:"center", fontSize:18,color:"white"}}>Continue</Text></TouchableOpacity>
+        {error2 &&<View style={{ flexDirection: 'row'}}><Image source={require('../images/error.png')}/><Text style={{ color: 'red' }}>Only numbers are valid</Text></View> }
+        {error1 &&<View style={{ flexDirection: 'row'}}><Image source={require('../images/error.png')}/><Text style={{ color: 'red' }}>Passcode not correct</Text></View> }
       </View>
     </View>
   );

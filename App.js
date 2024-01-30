@@ -17,11 +17,11 @@ import Test from './Components/test.js';
 import Test2 from './Components/Test2.js';
 import DrawerScreen from './Components/Home/Drawer.js' 
 import Refuel from './Components/Refuel/Refuelling.js';
+import RefuelEdit from './Components/Refuel/RefuelEdit.js';
 import Performance from './Components/Performance/Performance.js';
 import addRefuel from './Components/Refuel/addRefuel.js';
 import Vehicles from './Components/Vehicle/Vehicle.js'
 import VehicleForm from './Components/Vehicle/VehicleForm.js';
-import Chart from './Components/Home/Chart.js'
 import {NavigationContainer} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'; 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -58,6 +58,7 @@ const RefNav=()=>{
     <Stack.Navigator>
       <Stack.Screen name="RefuelTab" component={Refuel}/>
       <Stack.Screen name="RefuelForm" component={RefuelForm}/>
+      <Stack.Screen name="RefuelEdit" component={RefuelEdit} options={{headerShown:false}}/>
     </Stack.Navigator>
   )
 }
@@ -90,7 +91,6 @@ const App=()=> {
     <RealmProvider config={realmConfig}>
       <NavigationContainer> 
         <Stack.Navigator >
-        <Stack.Screen name="Chart" component={Chart}/>
           <Stack.Screen name="SignUp" component={SignUp}/>
           <Stack.Screen name="Login" component={Login}/>
           <Stack.Screen name="Passcode" component={Passcode}/>

@@ -5,30 +5,24 @@ import DropDown from '../ReusableComp/DropDown';
 import useStore from '../../Zustand';
 import { useRealm } from '@realm/react';
 import DatePicker from 'react-native-date-picker'
-const VehicleForm = ({navigation}) => {
+const VehicleForm = ({route,navigation}) => {
+    console.log("\n\n\ndata=\n",route.params.data)
     const [vehicles, setVehicles] = useState([]);
     const realm=useRealm();
-    const [date,setDate]=useState(new Date());
-    const [odoStart,setodoStart]=useState("");
-    const [odoEnd,setodoEnd]=useState("");
-    const [fuel,setFuel]=useState("");
+    const [date,setDate]=useState(route.params.data.date);
+    const [odoStart,setodoStart]=useState(route.params.data.odostart);
+    const [odoEnd,setodoEnd]=useState(route.params.data.odoend)
+    const [fuel,setFuel]=useState(route.params.data.fuelConsumed);
     const [open, setOpen] = useState(false)
-    const [price,setPrice]=useState("");
-    const {id,setVeh}= useStore();
-    const [selectedVehicleType, setSelectedVehicleType] = useState(null);
+    const [price,setPrice]=useState(route.params.data.price);
+    const {id}= useStore();
+    const [selectedVehicleType, setSelectedVehicleType] = useState(route.params.data.name);
     const [isModalVisible, setModalVisible] = useState(false);
     useEffect(() => {
       const allvehicles = realm.objects('Vehicle').filtered('userId = $0', id);
       setVehicles(allvehicles)
     }, [realm]);
-    console.log(vehicles)
     const vehiclenames=vehicles.map((vehicle)=>{return vehicle.name})
-    const handleDateChange = (newDate) => {
-        setChosenDate(newDate);
-    };
-    const toggleModal = () => {
-      setModalVisible(!isModalVisible);
-    };
     const adder=()=>{
         const start=parseInt(odoStart,10)
         const end=parseInt(odoEnd,10);
@@ -43,7 +37,7 @@ const VehicleForm = ({navigation}) => {
                 odostart:start,
                 odoend:end,
                 fuelConsumed:fue,
-                price:pric,
+                price:cost,
             });
           });
         navigation.goBack();
@@ -53,14 +47,15 @@ const VehicleForm = ({navigation}) => {
     <View style={{height:"100%",backgroundColor:"#F0F2F2",justifyContent:"space-between"}}>
         <View style={{alignItems:"center"}}>
             <Text style={{color:"#0B3C58",textAlign:"center", fontSize:20,fontFamily:"New Rubrik",fontWeight:"500"}}>Add Refuelling Record</Text>
-            
             <View style={{marginTop:24,marginBottom:24}}>
             <DropDown
                 name="Vehicle Name"
                 list={vehiclenames}
                 onSelect={(selectedOption) => setSelectedVehicleType(selectedOption)}
-                style={styles.input}/>
-            <TouchableOpacity onPress={()=>setOpen(true)} style={styles.input}><Text>Date</Text></TouchableOpacity>
+                style={styles.input}
+                default={selectedVehicleType}
+            />
+            <TouchableOpacity onPress={()=>setOpen(true)} style={styles.input}><Text>{date===null||date===undefined?"Date":date.toLocaleString()}</Text></TouchableOpacity>
             <DatePicker
               modal
               mode="date"
@@ -80,14 +75,14 @@ const VehicleForm = ({navigation}) => {
                 <TextInput
                     backgroundColor="white"
                     style={{...styles.input,flex:1}}
-                    placeholder='Start reading'
+                    placeholder={odoStart===null||odoStart===undefined?'Start reading':JSON.stringify(odoStart)}
                     onChangeText={(text) => setodoStart(text)}
                     value={odoStart}
                 />
                 <TextInput
                     backgroundColor="white"
                     style={{...styles.input,flex:1}}
-                    placeholder='End reading'
+                    placeholder={odoEnd===null||odoEnd===undefined?'End reading':JSON.stringify(odoEnd)}
                     onChangeText={(text) => setodoEnd(text)}
                     value={odoEnd}
                 />
@@ -97,14 +92,14 @@ const VehicleForm = ({navigation}) => {
                 <TextInput
                     backgroundColor="white"
                     style={{...styles.input,flex:1}}
-                    placeholder='Consumed(in L)'
+                    placeholder={fuel===null||fuel===undefined?'Consumed(in L)':JSON.stringify(fuel)}
                     onChangeText={(text) => setFuel(text)}
                     value={fuel}
                 />
                 <TextInput
                     backgroundColor="white"
                     style={{...styles.input,flex:1}}
-                    placeholder='Price (in $$)'
+                    placeholder={price===null||price===undefined?'Price (in $$)':JSON.stringify(price)}
                     onChangeText={(text) => setPrice(text)}
                     value={price}
                 />

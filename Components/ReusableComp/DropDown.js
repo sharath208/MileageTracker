@@ -10,7 +10,7 @@ const App = (props) => {
     <SelectDropdown
       data={props.list}
       onSelect={props.onSelect}
-      defaultButtonText={props.name}
+      defaultButtonText={props.default===null||props.default===undefined?props.name:props.default}
       buttonStyle={props.style}
       renderDropdownIcon={icon}
       defaultValue={props.default}
