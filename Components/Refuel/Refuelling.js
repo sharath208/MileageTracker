@@ -1,5 +1,5 @@
 import React, { useState , useEffect} from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet ,ScrollView, SafeAreaView,StatusBar} from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet ,ScrollView,RefreshControl, SafeAreaView,StatusBar} from 'react-native';
 import { useRealm } from '@realm/react';
 import useStore from '../../Zustand'
 import DropDown from '../ReusableComp/DropDown'
@@ -16,13 +16,13 @@ const Refuel = ({navigation}) => {
     const allvehicles = realm.objects('Vehicle').filtered('userId = $0', id);
     setVehicles(allvehicles)
   }, [realm]);
-  const vehiclenames=vehicles.map((vehicle)=>{return vehicle.name})
   useEffect(() => {
     const allvehicles = realm.objects('Fuel').filtered('vehicleId = $0', Vid);
     setFuels(allvehicles)
   }, [Vid,realm]);
+  const vehiclenames=(vehicles.map((vehicle)=>{return vehicle.name}))
   return (
-    <ScrollView style={{backgroundColor:"#F0F2F2",}} contentContainerStyle={{alignItems:"center"}}>
+    <ScrollView style={{backgroundColor:"#F0F2F2",}} contentContainerStyle={{flex:1,alignItems:"center"}}>
       {
         vehiclenames.length===0?
           <View style={{justifyContent:"center"}}>
@@ -35,33 +35,37 @@ const Refuel = ({navigation}) => {
             </View>
           </View>
           :
-          <View style={{height:"100%",width:"80%",alignItems:"center"}}>
-            <View>
+          <View style={{width:"80%"}}>
+            <Text style={{textAlign:"center"}}>Refuelling</Text>
+            <View style={{alignItems:"center"}}>
               <DropDown
-                  name="Vehicle Name"
-                  list={vehiclenames}
-                  onSelect={(selectedOption) => {setSelectedVehicleType(selectedOption);setVid(vehicles[vehiclenames.indexOf(selectedOption)].id)}}
-                  style={styles.input}/>
-            </View>
-            {
-              selectedVehicleType===null?<View></View>
-              :
-              <View style={{width:"100%",alignItems:"center"}}>
-                <View>
-                  <DropDown
+                name="Vehicle Name"
+                list={vehiclenames}
+                onSelect={(selectedOption) => {setSelectedVehicleType(selectedOption);setVid(vehicles[vehiclenames.indexOf(selectedOption)].id)}}
+                style={styles.input}
+              />
+              {
+                selectedVehicleType===null?<View></View>
+                :
+                  <View style={{width:"100%"}}>
+                    <View style={{alignItems:"center"}}><DropDown
                       name="Last 30 Days"
                       list={['Last Week','Last 30 Days','Last Year']}
                       onSelect={(selectedOption) => {setSelectedLengthType(selectedOption)}}
-                      style={{...styles.input,width:"50%",marginTop:"10%"}}/>
+                      style={{...styles.input,width:"50%",marginTop:"10%"}}
+                    /></View>
+                    <View style={{marginTop:"7%",alignItems:"center"}}>
+                      <Text>{fuels.length} Record{fuels.length===1?'':'s'} |</Text>
+                    </View>
+                    {fuels.map((fuel)=>{return <TouchableOpacity key={fuel.id} onPress={()=>{navigation.navigate('RefuelEdit',{name:selectedVehicleType,data:fuel});}}><RefuelProfile fuel={fuel.fuelConsumed} cost={fuel.price} date={fuel.date}/></TouchableOpacity>})}
+                    <View style={{alignItems:"flex-end"}}>
+                      <TouchableOpacity onPress={()=>{navigation.navigate('RefuelForm',{data:{}})}}>
+                        <Image source={require('../images/add.png')}/>
+                      </TouchableOpacity>
+                    </View>
                 </View>
-                <View style={{marginTop:"7%"}}>
-                  <Text>{fuels.length} Record{fuels.length===1?'':'s'} |</Text>
-                </View>
-                  {fuels.map((fuel)=>{return <TouchableOpacity key={fuel.id} onPress={()=>{navigation.navigate('RefuelEdit',{name:selectedVehicleType,date:fuel.date,price:fuel.price,odostart:fuel.odostart,odoend:fuel.odoend,fuelConsumed:fuel.fuelConsumed});}}><View style={{height:"30%"}}  ><RefuelProfile fuel={fuel.fuelConsumed} cost={fuel.price} date={fuel.date.toLocaleString()}/></View></TouchableOpacity>})}
-              </View>
-            }
-
-            <View style={{width:"100%",alignItems:"flex-end"}}><TouchableOpacity onPress={()=>{navigation.navigate('RefuelForm',{data:{}})}}><Image source={require('../images/add.png')}/></TouchableOpacity></View>
+              }
+            </View>
           </View>
         }
     </ScrollView>
@@ -70,10 +74,10 @@ const Refuel = ({navigation}) => {
 
 const styles = StyleSheet.create({
   input: {
-     color: "#58798C",
+    color: "#58798C",
     alignItems:"center",
     justifyContent:"center",
-    backgroundColor:"white", 
+    backgroundColor:"#C6E8E9", 
     width:"80%",
     height: 52,
     borderColor: 'gray',

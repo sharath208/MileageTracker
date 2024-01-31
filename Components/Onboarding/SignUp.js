@@ -4,6 +4,7 @@ import { ScrollView, View, Image, Text, StyleSheet ,TouchableOpacity} from 'reac
 import Profile from '../ReusableComp/Profile';
 import { useRealm } from '@realm/react';
 import useStore from '../../Zustand';
+import LinearGradient from 'react-native-linear-gradient';
 const ImageContentPage = ({navigation} ) => {
   const setter = useStore((state)=>state.setter);
   const [users, setUsers] = useState([]);
@@ -17,15 +18,15 @@ const ImageContentPage = ({navigation} ) => {
   const veh= realm.objects('Vehicle');
   const fuel=realm.objects('Fuel');
   console.log("\npeople: \n",peo,"\nVehicles: \n",veh,"\nfuels: \n",fuel)
-const del = () => {
-  realm.write(() => {
-    realm.delete(veh);
-  });
-};
 
   return (
-    <ScrollView style={{flex:1,backgroundColor:"#D6E4E4",}} contentContainerStyle={{alignItems:"center",}}>
-      <TouchableOpacity onPress={del}><Text>Delete all</Text></TouchableOpacity>
+    <LinearGradient
+      colors={['#C5E3DC', '#F6F6EC']}
+      style={{ flex: 1 }}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+    >
+    <ScrollView style={{flex:1}} contentContainerStyle={{alignItems:"center",}}>
       <View style={{height:52}}></View>
        <View style={styles.TopImage}>
           <Image source={require('../images/ic_launcher.png')} 
@@ -56,7 +57,7 @@ const del = () => {
       <View style={{width:"80%",alignItems:"center"}}>
         <View style={{height:200}}></View>
         <Text style={{fontSize:25,color:'#0B3C58',fontFamily:"New Rubrik"}}>Who are you?</Text>
-        <View style={{marginTop:"7%",flexDirection:"row",flexWrap:"wrap",justifyContent:"space-evenly"}}>
+        <View style={{marginTop:"7%",flexDirection:"row",flexWrap:"wrap"}}>
           {
               users.map((person)=>{return <TouchableOpacity key={person.id} style={styles.Image} onPress={()=>{
               if(person.passcode===10001){
@@ -66,11 +67,12 @@ const del = () => {
               else
               navigation.navigate('WelcomeBack', {id:person.id,email: person.email,name:person.name,nickname:person.nickname})}}><Profile name={person.name} nickname={person.nickname}/></TouchableOpacity>})
           } 
-          <TouchableOpacity style={styles.Image} onPress={()=>{navigation.navigate('Login')}}><View style={{alignItems:"center"}}><Image source={require('../images/add.png')} style={{borderRadius:50,height:100,width:100}}/><View style={{alignItems:"center"}}><Text>Add User</Text></View></View></TouchableOpacity>
+          <TouchableOpacity style={styles.Image} onPress={()=>{navigation.navigate('Login')}}><Image source={require('../images/add.png')} style={{borderRadius:50,height:80,width:80}}/><View style={{alignItems:"center"}}><Text>Add User</Text></View></TouchableOpacity>
         </View>
       </View>
       }
       </ScrollView>
+      </LinearGradient>
   );
 };
 
@@ -96,6 +98,7 @@ const styles = StyleSheet.create({
   Image:{
     height:150,
     width:150,
+    alignItems:"center"
   }
 });
 

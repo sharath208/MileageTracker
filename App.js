@@ -22,6 +22,8 @@ import Performance from './Components/Performance/Performance.js';
 import addRefuel from './Components/Refuel/addRefuel.js';
 import Vehicles from './Components/Vehicle/Vehicle.js'
 import VehicleForm from './Components/Vehicle/VehicleForm.js';
+import Hurray from './Components/Vehicle/Hurray.js';
+import Splash from './Splash.js'
 import {NavigationContainer} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'; 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -49,6 +51,7 @@ const VehNav=()=>{
     <Stack.Navigator>
       <Stack.Screen name="VehiclesTab" component={Vehicles}/>
       <Stack.Screen name="VehicleForm" component={VehicleForm} />
+      <Stack.Screen name="Hurray" component={Hurray} options={{headerShown:false}}/>
     </Stack.Navigator>
   )
 }
@@ -56,7 +59,7 @@ const VehNav=()=>{
 const RefNav=()=>{
   return(
     <Stack.Navigator>
-      <Stack.Screen name="RefuelTab" component={Refuel}/>
+      <Stack.Screen name="Refuelling" component={Refuel} options={{headerShown:false}}/>
       <Stack.Screen name="RefuelForm" component={RefuelForm}/>
       <Stack.Screen name="RefuelEdit" component={RefuelEdit} options={{headerShown:false}}/>
     </Stack.Navigator>
@@ -90,7 +93,8 @@ const App=()=> {
 
     <RealmProvider config={realmConfig}>
       <NavigationContainer> 
-        <Stack.Navigator >
+        <Stack.Navigator initialRouteName='Splash'>
+          <Stack.Screen name="Splash" component={Splash} options={{headerShown:false}}/>
           <Stack.Screen name="SignUp" component={SignUp}/>
           <Stack.Screen name="Login" component={Login}/>
           <Stack.Screen name="Passcode" component={Passcode}/>

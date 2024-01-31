@@ -4,8 +4,7 @@ const Frame=(props)=>
 {
     return(
         <View>
-            {console.log(props.imageSource)}
-            {props.imageSource===""?<Image source={require('../images/NoBikeimage.png')} style={{borderRadius:8}}/>:<Image source={{uri:props.imageSource}} style={{height:148,width:324,borderRadius:8}}/>}
+            {props.imageSource===""?<Image source={require('../images/NoBikeimage.png')} style={{borderRadius:8}}/>:<Image source={{uri:props.imageSource}} style={{height:148,borderRadius:8}}/>}
             {props.engine&&<View style={{flexDirection:"row",justifyContent:"space-around"}}>
                 <View style={{width:"75%"}}>
                     <View><Text style={{fontSize:20}}>{props.name}</Text></View>

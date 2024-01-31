@@ -35,6 +35,7 @@ class Fuel extends Realm.Object{
             id:'objectId',
             vehicleId:'objectId',
             date:'date',
+            addDate:'date',
             odostart:'int',
             odoend:'int',
             fuelConsumed:'float',
@@ -46,17 +47,16 @@ class Fuel extends Realm.Object{
 
 const realmConfig = {
     schema: [User, Vehicle, Fuel],
-    schemaVersion: 55,
+    schemaVersion: 57,
     onMigration: (oldRealm, newRealm) => {
         console.log('Re Migration function executed');
-        if (oldRealm.schemaVersion < 55) {
-            const oldObjects = oldRealm.objects('Vehicle');
-            const newObjects = newRealm.objects('Vehicle');
+        if (oldRealm.schemaVersion < 57) {
+            const oldObjects = oldRealm.objects('Fuel');
+            const newObjects = newRealm.objects('Fuel');
             for (let i = 0; i < oldObjects.length; i++) {
                 const oldObject = oldObjects[i];
                 const newObject = newObjects[i];
-                newObject.imageSource = "";
-                console.log('After Migration:', newObject.imageSource);
+                newObject.addDate = new Date();
             }
           }
       },

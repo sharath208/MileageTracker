@@ -71,7 +71,7 @@ const VehicleForm = ({navigation}) => {
                 imageSource:imageSource,
             });
           });
-        navigation.goBack();
+        navigation.navigate('Hurray',{source:imageSource,name:name});
     }
 
   return (

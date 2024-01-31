@@ -1,9 +1,9 @@
 import React , {useState }from 'react';
 import { useQuery, useRealm } from '@realm/react';
+import LinearGradient from 'react-native-linear-gradient';
 import { View, TextInput,Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
 const ImageContentPage = ({navigation} ) => {
   const [isChecked, setChecked] = useState(false);
-
   const handleCheckboxToggle = () => {
     setChecked(!isChecked);
   };
@@ -67,7 +67,13 @@ const ImageContentPage = ({navigation} ) => {
   const fuel=realm.objects('Fuel');
   console.log("people: ",peo,"Vehicles: ",veh,"fuels: ",fuel)
   return (
-    <View style={{flex:1,backgroundColor:"#D6E4E4",justifyContent:'space-between'}}>
+    <LinearGradient
+      colors={['#C5E3DC', '#F6F6EC']}
+      style={{ flex: 1 }}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+    >
+    <View style={{flex:1,justifyContent:'space-between'}}>
         <View style={{marginLeft:30,justifyContent:'space-between'}}>
           <View style={styles.largeBox}></View>
           <View>
@@ -122,6 +128,7 @@ const ImageContentPage = ({navigation} ) => {
           </View>
         </View>
       </View>
+      </LinearGradient>
   );
 };
 

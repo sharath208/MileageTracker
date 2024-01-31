@@ -2,6 +2,8 @@ import React, { useRef, useState } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 import { View, TextInput, Button, StyleSheet, Image,Text, TouchableOpacity} from 'react-native';
 import useStore from '../../Zustand';
+import LinearGradient from 'react-native-linear-gradient';
+import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 const PasscodeSetupScreen = ({route,navigation}) => {
   const setter = useStore((state)=>state.setter);
   const realm=useRealm();
@@ -9,43 +11,33 @@ const PasscodeSetupScreen = ({route,navigation}) => {
   const veh= realm.objects('Vehicle');
   const fuel=realm.objects('Fuel');
   console.log("people: ",peo,"Vehicles: ",veh,"fuels: ",fuel)
-  const [passcode,setPasscode]=useState(['','','','']);
-  const [check,setCheck]=useState(['','','','']);
+  const [passcode,setPasscode]=useState("");
+  const [check,setCheck]=useState('');
   const [error1,setError1]=useState(false);
   const [error2,setError2]=useState(false);
-  const handlePasscodeChange = (value, index) => {
-    if (/^\d+$/.test(value)) {
-      const newPasscode = [...passcode];
-      newPasscode[index] = value;
-      setPasscode(newPasscode);
-    } else if (value === '') {
-      const newPasscode = [...passcode];
-      newPasscode[index] = value;
-      setPasscode(newPasscode);
-    } else {
+  const handlePasscodeChange = (code) => {
+    if (/^\d+$/.test(code)) {
+      setPasscode(code)
+    }
+    else{
       setError2(true);
     }
   };
 
-  const handleConfirmPasscodeChange = (value, index) => {
-    if (/^\d+$/.test(value)) {
-      const newPasscode = [...check];
-      newPasscode[index] = value;
-      setCheck(newPasscode);
-    } else if (value === '') {
-      const newPasscode = [...check];
-      newPasscode[index] = value;
-      setCheck(newPasscode);
-    } else {
+  const handleConfirmPasscodeChange = (code) => {
+    if (/^\d+$/.test(code)) {
+      setCheck(code)
+    }
+    else{
       setError2(true);
     }
   };
 
   const Continue=()=>{
-    const enteredPasscode = parseInt(passcode.join(''));
-    const enteredConfirmPasscode = parseInt(check.join(''));
+    const enteredPasscode = parseInt(passcode);
+    const enteredConfirmPasscode = parseInt(check);
 
-    if (!isNaN(enteredPasscode) && !isNaN(enteredConfirmPasscode) && enteredPasscode === enteredConfirmPasscode && enteredPasscode.toString().length === 4) 
+    if (!isNaN(enteredPasscode) && !isNaN(enteredConfirmPasscode) && enteredPasscode === enteredConfirmPasscode && enteredPasscode.length === 4) 
     {
       setter(route.params.id,route.params.email,route.params.name,route.params.nickname)
       realm.write(() => {
@@ -65,43 +57,54 @@ const PasscodeSetupScreen = ({route,navigation}) => {
     navigation.navigate('HomeTab')
   };
   return (
-    <View style={{justifyContent:"space-between", flex:1,backgroundColor:"#D6E4E4"}}>
+    <LinearGradient
+      colors={['#C5E3DC', '#F6F6EC']}
+      style={{ flex: 1 }}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+    >
+    <View style={{justifyContent:"space-between", flex:1}}>
       <View style={{height:412,alignItems:'center'}}>
-        <View style={{width:324}}>
-          <View style={{height:120}}></View>
+        <View style={{width:"80%",marginTop:"20%"}}>
             <Text style={{color:"#0B3C58",fontFamily:"New Rubrik",fontSize:22,fontWeight:500}}>Set a Passcode</Text>
             <View style={{height:32}}></View>
             <View><Text style={{color:"#0B3C58",fontFamily:"New Rubrik",fontSize:20,fontWeight:500}}>Enter a 4-Digit Passcode <Text style={{color:"red"}}>*</Text></Text></View>
             <View><Text>You will need to enter at every app launch</Text></View>
             <View style={{height:12}}></View>
             <View style={{ flexDirection: 'row' }}>
-            {passcode.map((digit, index) => (
-            <TextInput
-              key={index}
-              style={styles.input}
-              keyboardType="numeric"
-              maxLength={1}
-              value={digit}
-              secureTextEntry={true}
-              onChangeText={(text) => handlePasscodeChange(text, index)}
-            />
-              ))}
+            <SmoothPinCodeInput
+              value={passcode}
+              cellSize={70}
+              onTextChange={handlePasscodeChange}
+              codeLength={4}
+              cellStyle={{
+                borderBottomWidth: 2,
+                borderColor: 'white',
+                borderRadius:8,
+                backgroundColor: 'white', 
+                height:"80%"
+              }}
+              cellSpacing={10}
+            />    
             </View>
 
             <View style={{height:32}}></View>
             <Text>Confirm Passcode <Text style={{color:"red"}}>*</Text></Text>
-            <View style={{ flexDirection: 'row', marginTop: 12 }}>
-              {check.map((digit, index) => (
-                <TextInput
-                  key={index}
-                  style={styles.input}
-                  keyboardType="numeric"
-                  maxLength={1}
-                  value={digit}
-                  secureTextEntry={true}
-                  onChangeText={(text) => handleConfirmPasscodeChange(text, index)}
-                />
-              ))}
+            <View style={{ flexDirection: 'row', marginTop: 10 }}>
+              <SmoothPinCodeInput
+                value={check}
+                cellSize={70}
+                onTextChange={handleConfirmPasscodeChange}
+                codeLength={4}
+                cellStyle={{
+                  borderBottomWidth: 2,
+                  borderColor: 'white',
+                  borderRadius:8,
+                  backgroundColor: 'white', 
+                  height:"80%"
+                }}
+                cellSpacing={10}
+              />    
             </View>
           {error2&&<View style={{flexDirection:"row"}}><Image source={require('../images/error.png')}/><Text style={{color:'#F93333', fontSize:12,fontFamily:"New Rubrik"}}>Only Numeric Values Allowed</Text></View>}
           {error1&&<View style={{flexDirection:"row"}}><Image source={require('../images/error.png')}/><Text style={{color:'#F93333', fontSize:12,fontFamily:"New Rubrik"}}>The passcodes don't match</Text></View>}
@@ -115,6 +118,7 @@ const PasscodeSetupScreen = ({route,navigation}) => {
         </View>
       </View>
       </View>
+      </LinearGradient>
   );
 };
 

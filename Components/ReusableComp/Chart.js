@@ -19,8 +19,8 @@ export const Bar=(props)=>{
         return {'month': month, 'y': AvgVal[index]};
     });
     return (
-      <ScrollView horizontal={true} contentContainerStyle={{ width: 800, padding: 16 }}>
-        <VictoryChart width={850}domainPadding={60} theme={VictoryTheme.material}>
+      <ScrollView horizontal={true} contentContainerStyle={styles.container}>
+        <VictoryChart width={1000}domainPadding={60} >
           <VictoryAxis
             tickValues={[1,2,3,4,5,6,7,8,9,10,11,12]}
             tickFormat={months}
@@ -33,6 +33,9 @@ export const Bar=(props)=>{
             data={formattedData}
             x='month'
             y='y'
+            style={{
+              data: { fill: '#EB655F' },
+            }}
           />
         </VictoryChart>
       </ScrollView>
@@ -56,21 +59,25 @@ export const Scatter = (props) => {
         return {'month': month, 'y':odo[index]===0?0:totMielage[index]/odo[index]};
     });
     return (
-      <ScrollView horizontal={true} contentContainerStyle={{ width: 800, padding: 16 }}>
-        <VictoryChart width={850}domainPadding={60} theme={VictoryTheme.grayscale}>
-          <VictoryAxis crossAxis
+      <ScrollView horizontal={true} contentContainerStyle={styles.container}>
+        <VictoryChart width={1000}domainPadding={60} >
+          <VictoryAxis 
             tickValues={[1,2,3,4,5,6,7,8,9,10,11,12]}
             tickFormat={months}
           />
-          <VictoryAxis crossAxis
+          <VictoryAxis 
             dependentAxis
             standalone={false}
           />
-          <VictoryScatter data={formattedData} />
+          <VictoryScatter data={formattedData} 
+            style={{
+              data: { fill: '#EB655F' },
+            }}
+          />
           <VictoryLine
             data={formattedData}
             style={{
-              data: { stroke: 'blue' },
+              data: { stroke: '#EB655F' },
             }}
             interpolation="cardinal"
           />
@@ -80,9 +87,7 @@ export const Scatter = (props) => {
   };
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f5fcff"
+    borderRadius:8,
+    backgroundColor: "white"
   }
 });

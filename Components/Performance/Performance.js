@@ -17,7 +17,9 @@ const SignUpPage = () => {
   const vehiclenames=vehicles.map((vehicle)=>{return vehicle.name})
   return (
     <ScrollView contentContainerStyle={{alignItems:'center',marginTop:12}}>
-        <View><Text style={{fontFamily:"New Rubrik",fontSize:16,color:"#0B3C58"}}>Choose the vehicle: </Text></View>
+        <View>
+          <Text style={{fontFamily:"New Rubrik",fontSize:16,color:"#0B3C58"}}>Choose the vehicle: </Text>
+        </View>
         <DropDown
           name="Vehicle Name"
           list={vehiclenames}
@@ -28,7 +30,7 @@ const SignUpPage = () => {
           selectedVehicle===null?
           <View></View>
           :
-          <View>
+          <View style={{width:"90%"}}>
             <Text>Money spent on fuel</Text>
             <Bar vid={Vid}/> 
             <Text>Vehicle mielage Performance</Text>

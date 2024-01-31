@@ -1,8 +1,4 @@
 {
   "name": "MielageTracker",
-  "displayName": "MielageTracker",
-  "android":{
-    "foregroundImage":"images/ic_launcher_round.jpg",
-    "backgroundColor":"#000000"
-  }
+  "displayName": "MielageTracker"
 }

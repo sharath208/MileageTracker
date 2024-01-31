@@ -5,18 +5,18 @@ import DropDown from '../ReusableComp/DropDown';
 import useStore from '../../Zustand';
 import { useRealm } from '@realm/react';
 import DatePicker from 'react-native-date-picker'
+import { parse } from 'react-native-svg';
 const VehicleForm = ({route,navigation}) => {
-    console.log("\n\n\ndata=\n",route.params.data)
     const [vehicles, setVehicles] = useState([]);
     const realm=useRealm();
-    const [date,setDate]=useState(route.params.data.date);
-    const [odoStart,setodoStart]=useState(route.params.data.odostart);
-    const [odoEnd,setodoEnd]=useState(route.params.data.odoend)
-    const [fuel,setFuel]=useState(route.params.data.fuelConsumed);
+    const [date,setDate]=useState(route.params.data.date===undefined||route.params.data.date===null?new Date():route.params.data.date);
+    const [odoStart,setodoStart]=useState(route.params.data.odostart===undefined?0:route.params.data.odostart);
+    const [odoEnd,setodoEnd]=useState(route.params.data.odoend===undefined?0:route.params.data.odoend)
+    const [fuel,setFuel]=useState(route.params.data.fuelConsumed===undefined?0:route.params.data.fuelConsumed);
     const [open, setOpen] = useState(false)
     const [price,setPrice]=useState(route.params.data.price);
     const {id}= useStore();
-    const [selectedVehicleType, setSelectedVehicleType] = useState(route.params.data.name);
+    const [selectedVehicleType, setSelectedVehicleType] = useState(route.params.data.name===undefined?null:JSON.stringify(route.params.data.name));
     const [isModalVisible, setModalVisible] = useState(false);
     useEffect(() => {
       const allvehicles = realm.objects('Vehicle').filtered('userId = $0', id);
@@ -27,12 +27,15 @@ const VehicleForm = ({route,navigation}) => {
         const start=parseInt(odoStart,10)
         const end=parseInt(odoEnd,10);
         const fue=parseFloat(fuel);
-        const pric=parseFloat(price)
-        const cost=pric.toFixed(2);
+        const pric=parseFloat(price).toFixed(2);
+        const cost=parseFloat(pric);
+
+        console.log(typeof(pric))
         realm.write(() => {
             realm.create('Fuel', {
                 id:new Realm.BSON.ObjectId(), 
                 vehicleId:vehicles[vehiclenames.indexOf(selectedVehicleType)].id,
+                addDate:route.params.data.addDate===undefined?new Date():route.params.data.addDate,
                 date:date,
                 odostart:start,
                 odoend:end,
