@@ -13,12 +13,31 @@ const ImageContentPage = ({navigation} ) => {
     const people = realm.objects('User');
     setUsers(people);
   }, [realm]);
-
-  const peo = realm.objects('User');
-  const veh= realm.objects('Vehicle');
-  const fuel=realm.objects('Fuel');
-  console.log("\npeople: \n",peo,"\nVehicles: \n",veh,"\nfuels: \n",fuel)
-
+  const peo=realm.objects('User')
+  console.log(peo,"\n");
+  useEffect(() => {
+    const people = realm.objects('User')
+    function onPeopleChange (Peo,changes){
+      changes.deletions.forEach((index) => {
+        setUsers(prevPeo => [...prevPeo.slice(0, index), ...prevPeo.slice(index + 1)]);
+      });
+      changes.insertions.forEach((index) => {
+        setUsers(Peo)
+      });
+      changes.newModifications.forEach((index) => {
+      });
+    }
+    try {
+      people.addListener(onPeopleChange);
+      return () => {
+        people.removeAllListeners(onPeopleChange);
+      };
+    } catch (error) {
+      console.error(
+        `An exception was thrown within the change listener: ${error}`
+      );
+    }
+  });
   return (
     <LinearGradient
       colors={['#C5E3DC', '#F6F6EC']}
@@ -57,9 +76,9 @@ const ImageContentPage = ({navigation} ) => {
       <View style={{width:"80%",alignItems:"center"}}>
         <View style={{height:200}}></View>
         <Text style={{fontSize:25,color:'#0B3C58',fontFamily:"New Rubrik"}}>Who are you?</Text>
-        <View style={{marginTop:"7%",flexDirection:"row",flexWrap:"wrap"}}>
+        <View style={{marginTop:"7%",flexDirection:"row",flexWrap:"wrap",justifyContent:"space-evenly"}}>
           {
-              users.map((person)=>{return <TouchableOpacity key={person.id} style={styles.Image} onPress={()=>{
+              users.map((person)=>{return <TouchableOpacity key={person.id} onPress={()=>{
               if(person.passcode===10001){
                 setter(person.id,person.email,person.name,person.nickname);
                 navigation.navigate('HomeTab')
@@ -67,7 +86,7 @@ const ImageContentPage = ({navigation} ) => {
               else
               navigation.navigate('WelcomeBack', {id:person.id,email: person.email,name:person.name,nickname:person.nickname})}}><Profile name={person.name} nickname={person.nickname}/></TouchableOpacity>})
           } 
-          <TouchableOpacity style={styles.Image} onPress={()=>{navigation.navigate('Login')}}><Image source={require('../images/add.png')} style={{borderRadius:50,height:80,width:80}}/><View style={{alignItems:"center"}}><Text>Add User</Text></View></TouchableOpacity>
+          <TouchableOpacity style={styles.Image}onPress={()=>{navigation.navigate('Login')}}><Image source={require('../images/add.png')} style={{borderRadius:50,height:80,width:80}}/><View style={{alignItems:"center"}}><Text>Add User</Text></View></TouchableOpacity>
         </View>
       </View>
       }

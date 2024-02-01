@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet ,ScrollView} from 'reac
 import DropDown from '../ReusableComp/DropDown';
 import {Bar,Scatter} from '../ReusableComp/Chart'
 import useStore  from '../../Zustand';
+import VehicleFrame from '../Vehicle/vehicleframes'
 import { useRealm } from '@realm/react';
 const SignUpPage = () => {
   const [vehicles,setVehicles]=useState([]);
@@ -31,6 +32,9 @@ const SignUpPage = () => {
           <View></View>
           :
           <View style={{width:"90%"}}>
+            <View style={{marginTop:"7%",alignItems:"center"}}>
+              <VehicleFrame source={vehicles[vehiclenames.indexOf(selectedVehicle)].imageSource} type={vehicles[vehiclenames.indexOf(selectedVehicle)].type}/>
+            </View>
             <Text>Money spent on fuel</Text>
             <Bar vid={Vid}/> 
             <Text>Vehicle mielage Performance</Text>

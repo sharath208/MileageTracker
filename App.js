@@ -60,7 +60,7 @@ const RefNav=()=>{
   return(
     <Stack.Navigator>
       <Stack.Screen name="Refuelling" component={Refuel} options={{headerShown:false}}/>
-      <Stack.Screen name="RefuelForm" component={RefuelForm}/>
+      <Stack.Screen name="RefuelForm" component={RefuelForm} options={{headerShown:false}}/>
       <Stack.Screen name="RefuelEdit" component={RefuelEdit} options={{headerShown:false}}/>
     </Stack.Navigator>
   )
@@ -68,7 +68,7 @@ const RefNav=()=>{
 
 const Tabnav=()=>{
   return(
-      <Tab.Navigator  screenOptions={({ route }) => ({
+      <Tab.Navigator options={{}} screenOptions={({ route }) => ({
         tabBarIcon: ({ focused}) => {
         let iconName;
         if (route.name === 'Home')

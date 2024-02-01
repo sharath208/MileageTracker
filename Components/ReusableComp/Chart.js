@@ -1,5 +1,5 @@
 import React ,{useEffect,useState}from "react";
-import { StyleSheet, View,ScrollView } from "react-native";
+import {Text, StyleSheet, View,ScrollView } from "react-native";
 import { VictoryBar, VictoryChart,VictoryAxis, VictoryTheme,VictoryLine,VictoryScatter } from "victory-native";
 import useStore from "../../Zustand";
 import { useRealm } from "@realm/react";
@@ -20,13 +20,16 @@ export const Bar=(props)=>{
     });
     return (
       <ScrollView horizontal={true} contentContainerStyle={styles.container}>
-        <VictoryChart width={1000}domainPadding={60} >
+        <VictoryChart width={1000} domainPadding={20}>
           <VictoryAxis
             tickValues={[1,2,3,4,5,6,7,8,9,10,11,12]}
             tickFormat={months}
           />
           <VictoryAxis
             dependentAxis
+            style={{
+              axisLabel: { padding: 30 },
+            }}        
             tickFormat={(tick)=>(`$${tick/1000}k`)}
           />
           <VictoryBar
@@ -85,9 +88,32 @@ export const Scatter = (props) => {
       </ScrollView>
     );
   };
+export const FuelInsights=(props)=>{
+  const realm=useRealm();
+  var AvgVal = 0,last=0;
+  const fuels=realm.objects('Fuel').filtered("vehicleId=$0",props.vid);
+  fuels.forEach((fuel)=>{
+    AvgVal+=fuel.price
+    last=fuel.fuelConsumed
+  })
+  return(
+    <View style={{height:"10%",backgroundColor:"#F0F2F2",justifyContent:"center"}}>
+      <View style={{flexDirection:"row",justifyContent:"space-evenly"}}>
+        <View style={{backgroundColor:"white",justifyContent:"space-evenly"}}>
+          <View style={{width:"90%"}}><Text>Avg Fuel Consumption</Text></View>
+          <View style={{width:"90%"}}><Text>{(AvgVal/12).toFixed(2)} L</Text></View>
+        </View>
+        <View style={{backgroundColor:"white",justifyContent:"space-evenly"}}>
+          <View style={{width:"90%"}}><Text>Last Fuel Consumption</Text></View>
+          <View style={{width:"90%"}}><Text>{(last).toFixed(2)} L</Text></View>
+        </View>
+      </View>
+    </View>
+  )
+}
 const styles = StyleSheet.create({
   container: {
-    borderRadius:8,
-    backgroundColor: "white"
+    backgroundColor:"white",
+    borderRadius:30
   }
 });

@@ -55,6 +55,9 @@ const ImageContentPage = ({route,navigation}) => {
         <View style={{height:12}}></View>
         <View style={{marginBottom:"7%",width:"100%"}}>
           <SmoothPinCodeInput
+          password mask={
+            <Text style={{fontSize:25}}>X</Text>
+          }
             value={passcode}
             cellSize={70}
             onTextChange={handlePasscodeChange}

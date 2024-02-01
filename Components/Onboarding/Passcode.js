@@ -37,7 +37,7 @@ const PasscodeSetupScreen = ({route,navigation}) => {
     const enteredPasscode = parseInt(passcode);
     const enteredConfirmPasscode = parseInt(check);
 
-    if (!isNaN(enteredPasscode) && !isNaN(enteredConfirmPasscode) && enteredPasscode === enteredConfirmPasscode && enteredPasscode.length === 4) 
+    if (!isNaN(enteredPasscode) && !isNaN(enteredConfirmPasscode) && enteredPasscode === enteredConfirmPasscode && passcode.length === 4) 
     {
       setter(route.params.id,route.params.email,route.params.name,route.params.nickname)
       realm.write(() => {
@@ -73,6 +73,9 @@ const PasscodeSetupScreen = ({route,navigation}) => {
             <View style={{height:12}}></View>
             <View style={{ flexDirection: 'row' }}>
             <SmoothPinCodeInput
+              password mask={
+                <Text style={{fontSize:25}}>X</Text>
+              }
               value={passcode}
               cellSize={70}
               onTextChange={handlePasscodeChange}
@@ -92,6 +95,9 @@ const PasscodeSetupScreen = ({route,navigation}) => {
             <Text>Confirm Passcode <Text style={{color:"red"}}>*</Text></Text>
             <View style={{ flexDirection: 'row', marginTop: 10 }}>
               <SmoothPinCodeInput
+              password mask={
+                <Text style={{fontSize:25}}>X</Text>
+              }
                 value={check}
                 cellSize={70}
                 onTextChange={handleConfirmPasscodeChange}

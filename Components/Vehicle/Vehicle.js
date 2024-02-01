@@ -23,9 +23,7 @@ const Vehicle = ({navigation}) => {
               </View>
               :
               <View syle={{flexDirection:"row",}}>
-                
-                  {vehicles.map((vehicle)=>{return <View key={vehicle.id} style={{width:"80%",backgroundColor:"white",borderRadius:12,marginTop:"6%"}}><VehicleFrame name={vehicle.name} type={vehicle.type} engine={vehicle.engine} imageSource={vehicle.imageSource}/></View>})}
-                
+                  {vehicles.map((vehicle)=>{return <View key={vehicle.id} style={{width:"80%",backgroundColor:"white",borderRadius:12,marginTop:"6%"}}><VehicleFrame name={vehicle.name} type={vehicle.type} engine={vehicle.engine} source={vehicle.imageSource}/></View>})}
               </View>
           }
           <View style={{width:"100%",alignItems:"flex-end",marginRight:15}}>
